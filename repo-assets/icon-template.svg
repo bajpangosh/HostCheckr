@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main gradient background -->
+    <linearGradient id="iconBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Icon element gradient -->
+    <linearGradient id="iconElementGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.8" />
+    </linearGradient>
+    
+    <!-- Shadow gradient -->
+    <radialGradient id="shadowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:rgba(0,0,0,0);stop-opacity:1" />
+      <stop offset="80%" style="stop-color:rgba(0,0,0,0);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(0,0,0,0.1);stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="512" height="512" rx="80" fill="url(#iconBgGradient)"/>
+  
+  <!-- Subtle shadow overlay -->
+  <rect width="512" height="512" rx="80" fill="url(#shadowGradient)"/>
+  
+  <!-- Main icon content -->
+  <g transform="translate(256, 256)">
+    
+    <!-- Server rack main structure -->
+    <g transform="translate(-80, -120)">
+      <!-- Main server cabinet -->
+      <rect x="0" y="0" width="160" height="240" rx="12" fill="url(#iconElementGradient)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      
+      <!-- Server units -->
+      <g fill="rgba(102, 126, 234, 0.7)">
+        <!-- Unit 1 -->
+        <rect x="20" y="30" width="120" height="32" rx="6" fill="currentColor" opacity="0.8"/>
+        <rect x="30" y="38" width="16" height="16" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="60" cy="46" r="4" fill="#4ade80"/>
+        <circle cx="75" cy="46" r="4" fill="#4ade80"/>
+        <circle cx="90" cy="46" r="4" fill="#4ade80"/>
+        
+        <!-- Unit 2 -->
+        <rect x="20" y="80" width="120" height="32" rx="6" fill="currentColor" opacity="0.8"/>
+        <rect x="30" y="88" width="16" height="16" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="60" cy="96" r="4" fill="#4ade80"/>
+        <circle cx="75" cy="96" r="4" fill="#f59e0b"/>
+        <circle cx="90" cy="96" r="4" fill="#4ade80"/>
+        
+        <!-- Unit 3 -->
+        <rect x="20" y="130" width="120" height="32" rx="6" fill="currentColor" opacity="0.8"/>
+        <rect x="30" y="138" width="16" height="16" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="60" cy="146" r="4" fill="#ef4444"/>
+        <circle cx="75" cy="146" r="4" fill="#f59e0b"/>
+        <circle cx="90" cy="146" r="4" fill="#4ade80"/>
+        
+        <!-- Unit 4 -->
+        <rect x="20" y="180" width="120" height="32" rx="6" fill="currentColor" opacity="0.8"/>
+        <rect x="30" y="188" width="16" height="16" rx="3" fill="rgba(255,255,255,0.9)"/>
+        <circle cx="60" cy="196" r="4" fill="#4ade80"/>
+        <circle cx="75" cy="196" r="4" fill="#4ade80"/>
+        <circle cx="90" cy="196" r="4" fill="#f59e0b"/>
+      </g>
+      
+      <!-- Ventilation grilles -->
+      <g stroke="rgba(102, 126, 234, 0.3)" stroke-width="1" fill="none">
+        <line x1="110" y1="40" x2="130" y2="40"/>
+        <line x1="110" y1="45" x2="130" y2="45"/>
+        <line x1="110" y1="50" x2="130" y2="50"/>
+        
+        <line x1="110" y1="90" x2="130" y2="90"/>
+        <line x1="110" y1="95" x2="130" y2="95"/>
+        <line x1="110" y1="100" x2="130" y2="100"/>
+      </g>
+    </g>
+    
+    <!-- Monitoring waves/signals -->
+    <g transform="translate(100, -60)" stroke="rgba(255,255,255,0.7)" stroke-width="3" fill="none">
+      <!-- Signal waves -->
+      <path d="M 0 0 Q 20 -15 40 0 Q 60 15 80 0" opacity="0.8"/>
+      <path d="M 0 20 Q 20 5 40 20 Q 60 35 80 20" opacity="0.6"/>
+      <path d="M 0 40 Q 20 25 40 40 Q 60 55 80 40" opacity="0.4"/>
+      
+      <!-- Data points -->
+      <circle cx="10" cy="0" r="3" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="30" cy="-8" r="3" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="50" cy="5" r="3" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="70" cy="-3" r="3" fill="rgba(255,255,255,0.9)"/>
+    </g>
+    
+    <!-- Health check indicator -->
+    <g transform="translate(-120, 80)">
+      <!-- Health badge background -->
+      <circle cx="0" cy="0" r="25" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="0" cy="0" r="20" fill="#4ade80"/>
+      
+      <!-- Checkmark -->
+      <path d="M -8 0 L -3 5 L 8 -8" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    
+    <!-- Performance indicator -->
+    <g transform="translate(120, 80)">
+      <!-- Performance badge background -->
+      <circle cx="0" cy="0" r="25" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="0" cy="0" r="20" fill="#667eea"/>
+      
+      <!-- Performance icon (speedometer) -->
+      <path d="M -10 5 A 12 12 0 0 1 10 5" stroke="white" stroke-width="2" fill="none"/>
+      <path d="M -5 0 L 0 -8 L 5 0" fill="white"/>
+    </g>
+    
+  </g>
+</svg>

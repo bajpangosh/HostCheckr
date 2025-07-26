@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1544" height="500" viewBox="0 0 1544 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Main gradient background -->
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Overlay gradient -->
+    <linearGradient id="overlayGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Icon gradient -->
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.7" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1544" height="500" fill="url(#mainGradient)"/>
+  
+  <!-- Overlay pattern -->
+  <rect width="1544" height="500" fill="url(#overlayGradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="1400" cy="100" r="80" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="1450" cy="400" r="60" fill="rgba(255,255,255,0.03)"/>
+  <circle cx="100" cy="400" r="40" fill="rgba(255,255,255,0.04)"/>
+  
+  <!-- Main content container -->
+  <g transform="translate(80, 0)">
+    
+    <!-- Plugin Icon -->
+    <g transform="translate(0, 120)">
+      <!-- Icon background -->
+      <rect x="0" y="0" width="120" height="120" rx="24" fill="url(#iconGradient)"/>
+      
+      <!-- Server/hosting icon -->
+      <g transform="translate(20, 20)" fill="rgba(102, 126, 234, 0.8)">
+        <!-- Server rack -->
+        <rect x="10" y="10" width="60" height="80" rx="4" fill="none" stroke="currentColor" stroke-width="3"/>
+        
+        <!-- Server units -->
+        <rect x="15" y="20" width="50" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+        <rect x="15" y="38" width="50" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+        <rect x="15" y="56" width="50" height="12" rx="2" fill="currentColor" opacity="0.7"/>
+        
+        <!-- Status indicators -->
+        <circle cx="25" cy="26" r="2" fill="#4ade80"/>
+        <circle cx="25" cy="44" r="2" fill="#4ade80"/>
+        <circle cx="25" cy="62" r="2" fill="#f59e0b"/>
+        
+        <!-- Monitoring waves -->
+        <path d="M 75 30 Q 85 25 95 30" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M 75 40 Q 85 35 95 40" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+        <path d="M 75 50 Q 85 45 95 50" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+      </g>
+    </g>
+    
+    <!-- Text content -->
+    <g transform="translate(160, 0)">
+      <!-- Main title -->
+      <text x="0" y="180" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white">
+        HostCheckr
+      </text>
+      
+      <!-- Tagline -->
+      <text x="0" y="220" font-family="Arial, sans-serif" font-size="28" font-weight="300" fill="rgba(255,255,255,0.9)">
+        Know Your Hosting. Instantly.
+      </text>
+      
+      <!-- Description -->
+      <text x="0" y="270" font-family="Arial, sans-serif" font-size="20" font-weight="400" fill="rgba(255,255,255,0.8)">
+        Comprehensive WordPress hosting environment analysis
+      </text>
+      <text x="0" y="300" font-family="Arial, sans-serif" font-size="20" font-weight="400" fill="rgba(255,255,255,0.8)">
+        and performance optimization recommendations
+      </text>
+    </g>
+    
+    <!-- Feature highlights -->
+    <g transform="translate(900, 120)">
+      <!-- Feature 1 -->
+      <g transform="translate(0, 0)">
+        <circle cx="12" cy="12" r="8" fill="rgba(255,255,255,0.2)"/>
+        <path d="M 8 12 L 11 15 L 16 9" stroke="white" stroke-width="2" fill="none"/>
+        <text x="30" y="17" font-family="Arial, sans-serif" font-size="16" fill="white">System Health Monitoring</text>
+      </g>
+      
+      <!-- Feature 2 -->
+      <g transform="translate(0, 40)">
+        <circle cx="12" cy="12" r="8" fill="rgba(255,255,255,0.2)"/>
+        <path d="M 8 12 L 11 15 L 16 9" stroke="white" stroke-width="2" fill="none"/>
+        <text x="30" y="17" font-family="Arial, sans-serif" font-size="16" fill="white">PHP Configuration Analysis</text>
+      </g>
+      
+      <!-- Feature 3 -->
+      <g transform="translate(0, 80)">
+        <circle cx="12" cy="12" r="8" fill="rgba(255,255,255,0.2)"/>
+        <path d="M 8 12 L 11 15 L 16 9" stroke="white" stroke-width="2" fill="none"/>
+        <text x="30" y="17" font-family="Arial, sans-serif" font-size="16" fill="white">Server Resource Monitoring</text>
+      </g>
+      
+      <!-- Feature 4 -->
+      <g transform="translate(0, 120)">
+        <circle cx="12" cy="12" r="8" fill="rgba(255,255,255,0.2)"/>
+        <path d="M 8 12 L 11 15 L 16 9" stroke="white" stroke-width="2" fill="none"/>
+        <text x="30" y="17" font-family="Arial, sans-serif" font-size="16" fill="white">Professional Support Available</text>
+      </g>
+    </g>
+    
+    <!-- KloudBoy branding -->
+    <g transform="translate(1200, 420)">
+      <text x="0" y="0" font-family="Arial, sans-serif" font-size="14" font-weight="300" fill="rgba(255,255,255,0.7)">
+        by KloudBoy
+      </text>
+    </g>
+    
+  </g>
+</svg>

@@ -1,0 +1,108 @@
+# Copyright (C) 2024 Bajpan Gosh
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: HostCheckr 1.0.0\n"
+"Report-Msgid-Bugs-To: https://hostcheckr.kloudboy.com/support\n"
+"POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: hostcheckr.php:XX
+msgid "HostCheckr - Know Your Hosting. Instantly."
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "HostCheckr"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Know Your Hosting. Instantly."
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Dashboard"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "System Health"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Server Resources"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Hosting Info"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Support"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Loading..."
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Error occurred"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Copied to clipboard!"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Export Report"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Refresh"
+msgstr ""#: 
+hostcheckr.php:XX
+msgid "Need Professional Support?"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Get expert WordPress optimization services from KloudBoy"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Contact KloudBoy"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "WordPress Performance Optimization"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Server Configuration & Tuning"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Security Hardening & Monitoring"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Hosting Migration & Setup"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Let our WordPress experts optimize your hosting environment for maximum performance and security."
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Expert Analysis"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Custom Solutions"
+msgstr ""
+
+#: hostcheckr.php:XX
+msgid "Ongoing Support"
+msgstr ""
