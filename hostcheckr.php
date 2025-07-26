@@ -312,16 +312,16 @@ class HostCheckr
                                 <p class="tagline"><?php esc_html_e('Know Your Hosting. Instantly.', 'hostcheckr'); ?></p>
                             </div>
                         </div>
-                        <p class="description"><?php _e('Instantly check if your hosting is slowing down your WordPress', 'hostcheckr'); ?></p>
+                        <p class="description"><?php esc_html_e('Instantly check if your hosting is slowing down your WordPress', 'hostcheckr'); ?></p>
                     </div>
                     <div class="header-actions">
                         <button class="button button-secondary refresh-btn">
                             <span class="dashicons dashicons-update"></span>
-                            <?php _e('Refresh', 'hostcheckr'); ?>
+                            <?php esc_html_e('Refresh', 'hostcheckr'); ?>
                         </button>
                         <button class="button button-primary export-btn">
                             <span class="dashicons dashicons-download"></span>
-                            <?php _e('Export Report', 'hostcheckr'); ?>
+                            <?php esc_html_e('Export Report', 'hostcheckr'); ?>
                         </button>
                     </div>
                 </div>
@@ -332,28 +332,36 @@ class HostCheckr
                 <div class="stat-item">
                     <span class="stat-icon dashicons dashicons-wordpress"></span>
                     <div class="stat-content">
-                        <span class="stat-label"><?php _e('WordPress', 'hostcheckr'); ?></span>
+                        <span class="stat-label"><?php esc_html_e('WordPress', 'hostcheckr'); ?></span>
                         <span class="stat-value"><?php echo esc_html(get_bloginfo('version')); ?></span>
                     </div>
                 </div>
                 <div class="stat-item">
                     <span class="stat-icon dashicons dashicons-editor-code"></span>
                     <div class="stat-content">
-                        <span class="stat-label"><?php _e('PHP', 'hostcheckr'); ?></span>
+                        <span class="stat-label"><?php esc_html_e('PHP', 'hostcheckr'); ?></span>
                         <span class="stat-value"><?php echo esc_html(PHP_VERSION); ?></span>
                     </div>
                 </div>
                 <div class="stat-item">
                     <span class="stat-icon dashicons dashicons-database"></span>
                     <div class="stat-content">
-                        <span class="stat-label"><?php _e('Database', 'hostcheckr'); ?></span>
-                        <span class="stat-value"><?php global $wpdb; echo esc_html(explode('-', $wpdb->get_var("SELECT VERSION()"))[0]); ?></span>
+                        <span class="stat-label"><?php esc_html_e('Database', 'hostcheckr'); ?></span>
+                        <span class="stat-value"><?php 
+                        global $wpdb; 
+                        $db_version = wp_cache_get('hostcheckr_db_version');
+                        if (false === $db_version) {
+                            $db_version = $wpdb->get_var("SELECT VERSION()");
+                            wp_cache_set('hostcheckr_db_version', $db_version, '', 3600);
+                        }
+                        echo esc_html(explode('-', $db_version)[0]); 
+                        ?></span>
                     </div>
                 </div>
                 <div class="stat-item">
                     <span class="stat-icon dashicons dashicons-admin-generic"></span>
                     <div class="stat-content">
-                        <span class="stat-label"><?php _e('Server', 'hostcheckr'); ?></span>
+                        <span class="stat-label"><?php esc_html_e('Server', 'hostcheckr'); ?></span>
                         <span class="stat-value"><?php echo esc_html($this->getWebServer()); ?></span>
                     </div>
                 </div>
@@ -367,7 +375,7 @@ class HostCheckr
                             <span class="dashicons dashicons-<?php echo esc_attr($overall_status['icon']); ?>"></span>
                         </div>
                         <div class="health-title">
-                            <h2><?php _e('System Health', 'hostcheckr'); ?></h2>
+                            <h2><?php esc_html_e('System Health', 'hostcheckr'); ?></h2>
                             <p class="health-status"><?php echo esc_html($overall_status['class'] === 'success' ? __('Excellent', 'hostcheckr') : ($overall_status['class'] === 'warning' ? __('Good', 'hostcheckr') : __('Needs Attention', 'hostcheckr'))); ?></p>
                         </div>
                         <?php if (!empty($overall_status['details'])): ?>
@@ -401,7 +409,7 @@ class HostCheckr
                                 <?php if ($overall_status['summary']['total'] === 0): ?>
                                     <span class="metric success">
                                         <span class="dashicons dashicons-yes-alt"></span>
-                                        <?php _e('All Good', 'hostcheckr'); ?>
+                                        <?php esc_html_e('All Good', 'hostcheckr'); ?>
                                     </span>
                                 <?php endif; ?>
                             </div>
@@ -418,13 +426,13 @@ class HostCheckr
                             <span class="dashicons dashicons-admin-users"></span>
                         </div>
                         <div class="support-content">
-                            <h3><?php _e('Need Professional Support?', 'hostcheckr'); ?></h3>
-                            <p><?php _e('Get expert WordPress optimization services from KloudBoy', 'hostcheckr'); ?></p>
+                            <h3><?php esc_html_e('Need Professional Support?', 'hostcheckr'); ?></h3>
+                            <p><?php esc_html_e('Get expert WordPress optimization services from KloudBoy', 'hostcheckr'); ?></p>
                         </div>
                         <div class="support-action">
                             <a href="https://hostcheckr.kloudboy.com/support" target="_blank" class="button button-primary support-btn">
                                 <span class="dashicons dashicons-external"></span>
-                                <?php _e('Contact KloudBoy', 'hostcheckr'); ?>
+                                <?php esc_html_e('Contact KloudBoy', 'hostcheckr'); ?>
                             </a>
                         </div>
                     </div>
@@ -432,37 +440,37 @@ class HostCheckr
                         <div class="support-services">
                             <div class="service-item">
                                 <span class="dashicons dashicons-performance"></span>
-                                <span><?php _e('WordPress Performance Optimization', 'hostcheckr'); ?></span>
+                                <span><?php esc_html_e('WordPress Performance Optimization', 'hostcheckr'); ?></span>
                             </div>
                             <div class="service-item">
                                 <span class="dashicons dashicons-admin-tools"></span>
-                                <span><?php _e('Server Configuration & Tuning', 'hostcheckr'); ?></span>
+                                <span><?php esc_html_e('Server Configuration & Tuning', 'hostcheckr'); ?></span>
                             </div>
                             <div class="service-item">
                                 <span class="dashicons dashicons-shield"></span>
-                                <span><?php _e('Security Hardening & Monitoring', 'hostcheckr'); ?></span>
+                                <span><?php esc_html_e('Security Hardening & Monitoring', 'hostcheckr'); ?></span>
                             </div>
                             <div class="service-item">
                                 <span class="dashicons dashicons-cloud"></span>
-                                <span><?php _e('Hosting Migration & Setup', 'hostcheckr'); ?></span>
+                                <span><?php esc_html_e('Hosting Migration & Setup', 'hostcheckr'); ?></span>
                             </div>
                         </div>
                         <div class="support-cta">
                             <p class="cta-text">
-                                <?php _e('Let our WordPress experts optimize your hosting environment for maximum performance and security.', 'hostcheckr'); ?>
+                                <?php esc_html_e('Let our WordPress experts optimize your hosting environment for maximum performance and security.', 'hostcheckr'); ?>
                             </p>
                             <div class="cta-features">
                                 <span class="feature-badge">
                                     <span class="dashicons dashicons-yes-alt"></span>
-                                    <?php _e('Expert Analysis', 'hostcheckr'); ?>
+                                    <?php esc_html_e('Expert Analysis', 'hostcheckr'); ?>
                                 </span>
                                 <span class="feature-badge">
                                     <span class="dashicons dashicons-yes-alt"></span>
-                                    <?php _e('Custom Solutions', 'hostcheckr'); ?>
+                                    <?php esc_html_e('Custom Solutions', 'hostcheckr'); ?>
                                 </span>
                                 <span class="feature-badge">
                                     <span class="dashicons dashicons-yes-alt"></span>
-                                    <?php _e('Ongoing Support', 'hostcheckr'); ?>
+                                    <?php esc_html_e('Ongoing Support', 'hostcheckr'); ?>
                                 </span>
                             </div>
                         </div>
@@ -487,7 +495,7 @@ class HostCheckr
                             <div class="section-header">
                                 <h3>
                                     <span class="dashicons dashicons-warning"></span>
-                                    <?php _e('Critical Issues', 'hostcheckr'); ?>
+                                    <?php esc_html_e('Critical Issues', 'hostcheckr'); ?>
                                 </h3>
                                 <span class="issue-count"><?php 
                 /* translators: %d: number of items */
@@ -502,21 +510,21 @@ class HostCheckr
                                                 <h4><?php echo esc_html($item['item']); ?></h4>
                                                 <span class="issue-type"><?php echo esc_html($item['type']); ?></span>
                                             </div>
-                                            <span class="severity-badge critical"><?php _e('Critical', 'hostcheckr'); ?></span>
+                                            <span class="severity-badge critical"><?php esc_html_e('Critical', 'hostcheckr'); ?></span>
                                         </div>
                                         <div class="issue-comparison">
                                             <div class="comparison-item current">
-                                                <span class="label"><?php _e('Current', 'hostcheckr'); ?></span>
+                                                <span class="label"><?php esc_html_e('Current', 'hostcheckr'); ?></span>
                                                 <span class="value"><?php echo esc_html($this->toString($item['current'])); ?></span>
                                             </div>
                                             <div class="comparison-arrow">→</div>
                                             <div class="comparison-item required">
-                                                <span class="label"><?php _e('Required', 'hostcheckr'); ?></span>
+                                                <span class="label"><?php esc_html_e('Required', 'hostcheckr'); ?></span>
                                                 <span class="value"><?php echo esc_html($this->toString($item['required'])); ?></span>
                                             </div>
                                         </div>
                                         <div class="issue-solution">
-                                            <?php echo $this->getRecommendation($item); ?>
+                                            <?php echo wp_kses_post($this->getRecommendation($item)); ?>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -529,7 +537,7 @@ class HostCheckr
                             <div class="section-header">
                                 <h3>
                                     <span class="dashicons dashicons-info"></span>
-                                    <?php _e('Optimization Opportunities', 'hostcheckr'); ?>
+                                    <?php esc_html_e('Optimization Opportunities', 'hostcheckr'); ?>
                                 </h3>
                                 <span class="issue-count"><?php 
                                 /* translators: %d: number of items */
@@ -544,21 +552,21 @@ class HostCheckr
                                                 <h4><?php echo esc_html($item['item']); ?></h4>
                                                 <span class="issue-type"><?php echo esc_html($item['type']); ?></span>
                                             </div>
-                                            <span class="severity-badge warning"><?php _e('Warning', 'hostcheckr'); ?></span>
+                                            <span class="severity-badge warning"><?php esc_html_e('Warning', 'hostcheckr'); ?></span>
                                         </div>
                                         <div class="issue-comparison">
                                             <div class="comparison-item current">
-                                                <span class="label"><?php _e('Current', 'hostcheckr'); ?></span>
+                                                <span class="label"><?php esc_html_e('Current', 'hostcheckr'); ?></span>
                                                 <span class="value"><?php echo esc_html($this->toString($item['current'])); ?></span>
                                             </div>
                                             <div class="comparison-arrow">→</div>
                                             <div class="comparison-item recommended">
-                                                <span class="label"><?php _e('Recommended', 'hostcheckr'); ?></span>
+                                                <span class="label"><?php esc_html_e('Recommended', 'hostcheckr'); ?></span>
                                                 <span class="value"><?php echo esc_html($this->toString($item['recommended'] ?? $item['required'])); ?></span>
                                             </div>
                                         </div>
                                         <div class="issue-solution">
-                                            <?php echo $this->getRecommendation($item); ?>
+                                            <?php echo wp_kses_post($this->getRecommendation($item)); ?>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
@@ -572,12 +580,12 @@ class HostCheckr
             <div class="search-filter-bar">
                 <div class="search-container">
                     <span class="dashicons dashicons-search"></span>
-                    <input type="text" id="system-info-search" placeholder="<?php _e('Search settings, extensions, or values...', 'hostcheckr'); ?>" />
+                    <input type="text" id="system-info-search" placeholder="<?php esc_html_e('Search settings, extensions, or values...', 'hostcheckr'); ?>" />
                 </div>
                 <div class="filter-tabs">
-                    <button class="filter-tab active" data-filter="all"><?php _e('All', 'hostcheckr'); ?></button>
-                    <button class="filter-tab" data-filter="issues"><?php _e('Issues Only', 'hostcheckr'); ?></button>
-                    <button class="filter-tab" data-filter="success"><?php _e('Passed', 'hostcheckr'); ?></button>
+                    <button class="filter-tab active" data-filter="all"><?php esc_html_e('All', 'hostcheckr'); ?></button>
+                    <button class="filter-tab" data-filter="issues"><?php esc_html_e('Issues Only', 'hostcheckr'); ?></button>
+                    <button class="filter-tab" data-filter="success"><?php esc_html_e('Passed', 'hostcheckr'); ?></button>
                 </div>
             </div>
 
@@ -586,35 +594,35 @@ class HostCheckr
                 <div class="content-tabs-nav">
                     <button class="content-tab <?php echo $current_tab === 'overview' ? 'active' : ''; ?>" data-tab="overview">
                         <span class="dashicons dashicons-dashboard"></span>
-                        <span class="tab-label"><?php _e('Overview', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('Overview', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'versions' ? 'active' : ''; ?>" data-tab="versions">
                         <span class="dashicons dashicons-admin-settings"></span>
-                        <span class="tab-label"><?php _e('System Versions', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('System Versions', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'config' ? 'active' : ''; ?>" data-tab="config">
                         <span class="dashicons dashicons-admin-generic"></span>
-                        <span class="tab-label"><?php _e('PHP Configuration', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('PHP Configuration', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'extensions' ? 'active' : ''; ?>" data-tab="extensions">
                         <span class="dashicons dashicons-admin-plugins"></span>
-                        <span class="tab-label"><?php _e('PHP Extensions', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('PHP Extensions', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'server' ? 'active' : ''; ?>" data-tab="server">
                         <span class="dashicons dashicons-admin-site-alt3"></span>
-                        <span class="tab-label"><?php _e('Server Info', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('Server Info', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'resources' ? 'active' : ''; ?>" data-tab="resources">
                         <span class="dashicons dashicons-performance"></span>
-                        <span class="tab-label"><?php _e('System Resources', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('System Resources', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'hosting' ? 'active' : ''; ?>" data-tab="hosting">
                         <span class="dashicons dashicons-cloud"></span>
-                        <span class="tab-label"><?php _e('Hosting Info', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('Hosting Info', 'hostcheckr'); ?></span>
                     </button>
                     <button class="content-tab <?php echo $current_tab === 'wordpress' ? 'active' : ''; ?>" data-tab="wordpress">
                         <span class="dashicons dashicons-wordpress-alt"></span>
-                        <span class="tab-label"><?php _e('WordPress Info', 'hostcheckr'); ?></span>
+                        <span class="tab-label"><?php esc_html_e('WordPress Info', 'hostcheckr'); ?></span>
                     </button>
                 </div>
 
@@ -626,7 +634,7 @@ class HostCheckr
                             <div class="overview-section">
                                 <h3>
                                     <span class="dashicons dashicons-admin-settings"></span>
-                                    <?php _e('System Requirements', 'hostcheckr'); ?>
+                                    <?php esc_html_e('System Requirements', 'hostcheckr'); ?>
                                 </h3>
                                 <div class="requirement-checks">
                                     <?php 
@@ -652,7 +660,7 @@ class HostCheckr
                             <div class="overview-section">
                                 <h3>
                                     <span class="dashicons dashicons-admin-plugins"></span>
-                                    <?php _e('Critical Extensions', 'hostcheckr'); ?>
+                                    <?php esc_html_e('Critical Extensions', 'hostcheckr'); ?>
                                 </h3>
                                 <div class="extension-checks">
                                     <?php 
@@ -683,16 +691,16 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-admin-settings"></span>
-                                <?php _e('System Versions & Server Information', 'hostcheckr'); ?>
+                                <?php esc_html_e('System Versions & Server Information', 'hostcheckr'); ?>
                             </h2>
                             <div class="table-container">
                                 <table class="wp-list-table widefat fixed striped modern-table">
                                     <thead>
                                         <tr>
-                                            <th class="manage-column column-setting"><?php _e('Setting', 'hostcheckr'); ?></th>
-                                            <th class="manage-column column-required"><?php _e('Required', 'hostcheckr'); ?></th>
-                                            <th class="manage-column column-recommended"><?php _e('Recommended', 'hostcheckr'); ?></th>
-                                            <th class="manage-column column-current"><?php _e('Current', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-setting"><?php esc_html_e('Setting', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-required"><?php esc_html_e('Required', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-recommended"><?php esc_html_e('Recommended', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-current"><?php esc_html_e('Current', 'hostcheckr'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -732,16 +740,16 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-admin-generic"></span>
-                                <?php _e('PHP Configuration Settings', 'hostcheckr'); ?>
+                                <?php esc_html_e('PHP Configuration Settings', 'hostcheckr'); ?>
                             </h2>
                             <div class="table-container">
                                 <table class="wp-list-table widefat fixed striped modern-table">
                                     <thead>
                                         <tr>
-                                            <th class="manage-column column-setting"><?php _e('Setting', 'hostcheckr'); ?></th>
-                                            <th class="manage-column column-required"><?php _e('Required', 'hostcheckr'); ?></th>
-                                            <th class="manage-column column-recommended"><?php _e('Recommended', 'hostcheckr'); ?></th>
-                                            <th class="manage-column column-current"><?php _e('Current', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-setting"><?php esc_html_e('Setting', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-required"><?php esc_html_e('Required', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-recommended"><?php esc_html_e('Recommended', 'hostcheckr'); ?></th>
+                                            <th class="manage-column column-current"><?php esc_html_e('Current', 'hostcheckr'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -770,7 +778,7 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-admin-plugins"></span>
-                                <?php _e('PHP Extensions Status', 'hostcheckr'); ?>
+                                <?php esc_html_e('PHP Extensions Status', 'hostcheckr'); ?>
                             </h2>
                             <div class="extensions-grid">
                                 <?php foreach ($this->getPhpExtensions() as $label => $data) : ?>
@@ -783,11 +791,11 @@ class HostCheckr
                                         </div>
                                         <div class="extension-details">
                                             <div class="detail-row">
-                                                <span class="label"><?php _e('Required:', 'hostcheckr'); ?></span>
+                                                <span class="label"><?php esc_html_e('Required:', 'hostcheckr'); ?></span>
                                                 <span class="value"><?php echo esc_html($this->toString($data[0])); ?></span>
                                             </div>
                                             <div class="detail-row">
-                                                <span class="label"><?php _e('Recommended:', 'hostcheckr'); ?></span>
+                                                <span class="label"><?php esc_html_e('Recommended:', 'hostcheckr'); ?></span>
                                                 <span class="value"><?php echo esc_html($this->toString($data[1])); ?></span>
                                             </div>
                                         </div>
@@ -802,7 +810,7 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-admin-site-alt3"></span>
-                                <?php _e('Server Configuration & Environment', 'hostcheckr'); ?>
+                                <?php esc_html_e('Server Configuration & Environment', 'hostcheckr'); ?>
                             </h2>
                             <div class="server-info-grid">
                                 <?php foreach ($this->getServerInfo() as $label => $value) : ?>
@@ -822,7 +830,7 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-performance"></span>
-                                <?php _e('System Resources & Performance', 'hostcheckr'); ?>
+                                <?php esc_html_e('System Resources & Performance', 'hostcheckr'); ?>
                             </h2>
                             
                             <!-- Resource Overview Cards -->
@@ -881,7 +889,7 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-cloud"></span>
-                                <?php _e('Hosting Provider & Infrastructure', 'hostcheckr'); ?>
+                                <?php esc_html_e('Hosting Provider & Infrastructure', 'hostcheckr'); ?>
                             </h2>
                             
                             <div class="hosting-info-container">
@@ -939,7 +947,7 @@ class HostCheckr
                         <div class="info-section">
                             <h2>
                                 <span class="dashicons dashicons-wordpress-alt"></span>
-                                <?php _e('WordPress Installation Details', 'hostcheckr'); ?>
+                                <?php esc_html_e('WordPress Installation Details', 'hostcheckr'); ?>
                             </h2>
                             <div class="wordpress-info-grid">
                                 <?php foreach ($this->getWordPressInfo() as $label => $value) : ?>
@@ -958,14 +966,23 @@ class HostCheckr
             <div class="hostcheckr-footer">
                 <div class="footer-content">
                     <div class="footer-branding">
-                        <p><?php printf(__('Powered by %s', 'hostcheckr'), '<strong>HostCheckr</strong>'); ?> | 
-                        <?php printf(__('Developed by %s', 'hostcheckr'), '<a href="https://kloudboy.com" target="_blank">Bajpan Gosh</a>'); ?> | 
-                        <?php printf(__('Company: %s', 'hostcheckr'), '<a href="https://kloudboy.com" target="_blank">KloudBoy</a>'); ?></p>
+                        <p><?php 
+                        /* translators: %s: plugin name */
+                        printf(esc_html__('Powered by %s', 'hostcheckr'), '<strong>HostCheckr</strong>'); 
+                        ?> | 
+                        <?php 
+                        /* translators: %s: developer name with link */
+                        printf(esc_html__('Developed by %s', 'hostcheckr'), '<a href="https://kloudboy.com" target="_blank">Bajpan Gosh</a>'); 
+                        ?> | 
+                        <?php 
+                        /* translators: %s: company name with link */
+                        printf(esc_html__('Company: %s', 'hostcheckr'), '<a href="https://kloudboy.com" target="_blank">KloudBoy</a>'); 
+                        ?></p>
                     </div>
                     <div class="footer-links">
-                        <a href="https://hostcheckr.kloudboy.com" target="_blank"><?php _e('Visit Plugin Site', 'hostcheckr'); ?></a>
-                        <a href="https://hostcheckr.kloudboy.com/support" target="_blank"><?php _e('Get Support', 'hostcheckr'); ?></a>
-                        <a href="https://hostcheckr.kloudboy.com/docs" target="_blank"><?php _e('Documentation', 'hostcheckr'); ?></a>
+                        <a href="https://hostcheckr.kloudboy.com" target="_blank"><?php esc_html_e('Visit Plugin Site', 'hostcheckr'); ?></a>
+                        <a href="https://hostcheckr.kloudboy.com/support" target="_blank"><?php esc_html_e('Get Support', 'hostcheckr'); ?></a>
+                        <a href="https://hostcheckr.kloudboy.com/docs" target="_blank"><?php esc_html_e('Documentation', 'hostcheckr'); ?></a>
                     </div>
                 </div>
             </div>
@@ -1004,7 +1021,11 @@ class HostCheckr
         ];
 
         // MySQL Version
-        $mysql_version = $wpdb->get_var("SELECT VERSION()");
+        $mysql_version = wp_cache_get('hostcheckr_mysql_version');
+        if (false === $mysql_version) {
+            $mysql_version = $wpdb->get_var("SELECT VERSION()");
+            wp_cache_set('hostcheckr_mysql_version', $mysql_version, '', 3600);
+        }
         $data['MySQL Version'] = [
             $this->requirements['versions']['mysql'],
             $this->recommended['versions']['mysql'],
@@ -1705,6 +1726,7 @@ class HostCheckr
         // Database response time
         global $wpdb;
         $db_start = microtime(true);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->get_var("SELECT 1");
         $db_end = microtime(true);
         $performance['db_response'] = round(($db_end - $db_start) * 1000, 2) . ' ms';
