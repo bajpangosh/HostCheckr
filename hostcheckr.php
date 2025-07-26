@@ -11,9 +11,9 @@
  * Text Domain: hostcheckr
  * Domain Path: /languages
  * Requires at least: 5.0
- * Tested up to: 6.4
+ * Tested up to: 6.8
  * Requires PHP: 7.4
- * Network: false
+
  * 
  * HostCheckr - Know Your Hosting. Instantly.
  * Developed by Bajpan Gosh for KloudBoy
@@ -162,16 +162,10 @@ class HostCheckr
     {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
-        add_action('plugins_loaded', array($this, 'load_textdomain'));
+
     }
 
-    /**
-     * Load plugin textdomain for translations
-     */
-    public function load_textdomain()
-    {
-        load_plugin_textdomain('hostcheckr', false, dirname(plugin_basename(__FILE__)) . '/languages');
-    }
+
 
     /**
      * Add plugin to main admin menu

@@ -60,7 +60,7 @@
 ## ✅ WORDPRESS COMPATIBILITY
 
 ### Version Requirements
-- ✅ **WordPress** - Requires 5.0+, tested up to 6.4
+- ✅ **WordPress** - Requires 5.0+, tested up to 6.8
 - ✅ **PHP** - Requires 7.4+, compatible with 8.x
 - ✅ **MySQL** - Compatible with 5.6+ and 8.0+
 
