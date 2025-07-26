@@ -285,6 +285,7 @@ class HostCheckr
         }
         
         $overall_status = $this->getOverallStatus();
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce
         $current_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'overview';
         ?>
         <div class="wrap hostcheckr-wrap">
@@ -351,6 +352,7 @@ class HostCheckr
                         global $wpdb; 
                         $db_version = wp_cache_get('hostcheckr_db_version');
                         if (false === $db_version) {
+                            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Getting database version for system info
                             $db_version = $wpdb->get_var("SELECT VERSION()");
                             wp_cache_set('hostcheckr_db_version', $db_version, '', 3600);
                         }
@@ -1023,6 +1025,7 @@ class HostCheckr
         // MySQL Version
         $mysql_version = wp_cache_get('hostcheckr_mysql_version');
         if (false === $mysql_version) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Getting MySQL version for system requirements check
             $mysql_version = $wpdb->get_var("SELECT VERSION()");
             wp_cache_set('hostcheckr_mysql_version', $mysql_version, '', 3600);
         }
