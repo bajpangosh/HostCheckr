@@ -1,0 +1,239 @@
+Checks complete. Errors were found.
+
+FILE: hostcheckr.php
+Line	Column	Type	Code	Message	Edit Link
+386	54	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+392	54	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+486	72	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+525	72	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+949	41	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+950	38	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+951	38	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+1208	32	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to _n() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+1210	37	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to _n() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+1228	38	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to _n() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+1807	28	ERROR	WordPress.WP.I18n.MissingTranslatorsComment	A function call to __() with texts containing placeholders was found, but was not accompanied by a "translators:" comment on the line above to clarify the meaning of the placeholders.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+1807	31	ERROR	WordPress.WP.I18n.UnorderedPlaceholdersText	Multiple placeholders in translatable strings should be ordered. Expected "%1$d, %2$d, %3$d", but got "%d, %d, %d" in '%d days, %d hours, %d minutes'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+
+FILE: hostcheckr.php
+Line	Column	Type	Code	Message	Edit Link
+52	16	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+57	16	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+284	20	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+311	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+312	58	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+315	54	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+320	35	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+324	35	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+335	56	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+342	56	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+349	56	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+356	56	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+370	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+386	54	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+386	87	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$overall_status['summary']['critical']'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+392	54	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+392	87	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$overall_status['summary']['warnings']'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+398	47	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+415	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+416	38	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+421	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+429	45	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+433	45	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+437	45	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+441	45	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+446	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+451	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+455	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+459	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+484	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+486	72	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+496	89	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+500	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+505	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+510	56	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$this'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+523	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+525	72	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+535	88	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+539	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+544	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+549	56	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '$this'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+563	83	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+566	79	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+567	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+568	76	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+577	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+581	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+585	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+589	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+593	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+597	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+601	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+605	55	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+617	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+643	43	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+657	102	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+657	134	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+674	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+680	92	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+681	93	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+682	96	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+683	92	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+723	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+729	92	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+730	93	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+731	96	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+732	92	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+761	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+774	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+778	75	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+793	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+813	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+872	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+930	39	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+949	41	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+950	38	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+951	38	ERROR	WordPress.Security.EscapeOutput.OutputNotEscaped	All output should be run through an escaping function (see the Security sections in the WordPress Developer Handbooks), found '__'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+954	89	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+955	97	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+956	94	ERROR	WordPress.Security.EscapeOutput.UnsafePrintingFunction	All output should be run through an escaping function (like esc_html_e() or esc_attr_e()), found '_e'.
+Learn more (opens in a new tab)	View in code editor (opens in a new tab)
+
+FILE: hostcheckr.php
+Line	Column	Type	Code	Message	Edit Link
+1542	9	ERROR	WordPress.WP.AlternativeFunctions.unlink_unlink	unlink() is discouraged. Use wp_delete_file() to delete a file.	View in code editor (opens in a new tab)
+1702	9	ERROR	WordPress.WP.AlternativeFunctions.unlink_unlink	unlink() is discouraged. Use wp_delete_file() to delete a file.	View in code editor (opens in a new tab)
+1748	51	ERROR	WordPress.DateTime.RestrictedFunctions.date_date	date() is affected by runtime timezone changes which can cause date/time to be incorrectly displayed. Use gmdate() instead.	View in code editor (opens in a new tab)
+1751	17	ERROR	WordPress.WP.AlternativeFunctions.file_system_operations_fclose	File operations should use WP_Filesystem methods instead of direct PHP filesystem calls. Found: fclose().	View in code editor (opens in a new tab)
+288	30	WARNING	WordPress.Security.NonceVerification.Recommended	Processing form data without nonce verification.	View in code editor (opens in a new tab)
+288	66	WARNING	WordPress.Security.NonceVerification.Recommended	Processing form data without nonce verification.	View in code editor (opens in a new tab)
+288	66	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_GET['tab'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1289	32	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['DOCUMENT_ROOT'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1289	32	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['DOCUMENT_ROOT']	View in code editor (opens in a new tab)
+1290	31	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_ADMIN'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1290	31	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_ADMIN']	View in code editor (opens in a new tab)
+1291	30	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_PORT'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1291	30	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_PORT']	View in code editor (opens in a new tab)
+1293	34	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_PROTOCOL'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1293	34	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_PROTOCOL']	View in code editor (opens in a new tab)
+1294	33	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['REQUEST_METHOD'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1294	33	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['REQUEST_METHOD']	View in code editor (opens in a new tab)
+1295	29	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['HTTP_USER_AGENT'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1295	29	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['HTTP_USER_AGENT']	View in code editor (opens in a new tab)
+1630	35	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_SOFTWARE'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1630	35	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_SOFTWARE']	View in code editor (opens in a new tab)
+1632	35	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_NAME'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1632	35	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_NAME']	View in code editor (opens in a new tab)
+1728	33	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotValidated	Detected usage of a possibly undefined superglobal array index: $_SERVER['HTTP_HOST']. Use isset() or empty() to check the index exists before using it	View in code editor (opens in a new tab)
+1728	33	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['HTTP_HOST'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1728	33	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['HTTP_HOST']	View in code editor (opens in a new tab)
+1738	28	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotValidated	Detected usage of a possibly undefined superglobal array index: $_SERVER['HTTP_HOST']. Use isset() or empty() to check the index exists before using it	View in code editor (opens in a new tab)
+1738	28	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['HTTP_HOST'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1738	28	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['HTTP_HOST']	View in code editor (opens in a new tab)
+1837	16	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_ADDR'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1837	16	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_ADDR']	View in code editor (opens in a new tab)
+1837	43	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['LOCAL_ADDR'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+1837	43	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['LOCAL_ADDR']	View in code editor (opens in a new tab)
+1848	16	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotValidated	Detected usage of a possibly undefined superglobal array index: $_SERVER['SERVER_PORT']. Use isset() or empty() to check the index exists before using it	View in code editor (opens in a new tab)
+2053	19	WARNING	WordPress.Security.ValidatedSanitizedInput.MissingUnslash	$_SERVER['SERVER_SOFTWARE'] not unslashed before sanitization. Use wp_unslash() or similar	View in code editor (opens in a new tab)
+2053	19	WARNING	WordPress.Security.ValidatedSanitizedInput.InputNotSanitized	Detected usage of a non-sanitized input variable: $_SERVER['SERVER_SOFTWARE']	View in code editor (opens in a new tab)
+
+FILE: hostcheckr.php
+Line	Column	Type	Code	Message	Edit Link
+350	97	WARNING	WordPress.DB.DirectDatabaseQuery.DirectQuery	Use of a direct database call is discouraged.	View in code editor (opens in a new tab)
+350	97	WARNING	WordPress.DB.DirectDatabaseQuery.NoCaching	Direct database call without caching detected. Consider using wp_cache_get() / wp_cache_set() or wp_cache_delete().	View in code editor (opens in a new tab)
+995	26	WARNING	WordPress.DB.DirectDatabaseQuery.DirectQuery	Use of a direct database call is discouraged.	View in code editor (opens in a new tab)
+995	26	WARNING	WordPress.DB.DirectDatabaseQuery.NoCaching	Direct database call without caching detected. Consider using wp_cache_get() / wp_cache_set() or wp_cache_delete().	View in code editor (opens in a new tab)
+1693	9	WARNING	WordPress.DB.DirectDatabaseQuery.DirectQuery	Use of a direct database call is discouraged.	View in code editor (opens in a new tab)
+1693	9	WARNING	WordPress.DB.DirectDatabaseQuery.NoCaching	Direct database call without caching detected. Consider using wp_cache_get() / wp_cache_set() or wp_cache_delete().	View in code editor (opens in a new tab)

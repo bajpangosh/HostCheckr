@@ -49,12 +49,12 @@ function hostcheckr_activate() {
     // Check minimum requirements
     if (version_compare(PHP_VERSION, '7.4', '<')) {
         deactivate_plugins(plugin_basename(__FILE__));
-        wp_die(__('HostCheckr requires PHP 7.4 or higher.', 'hostcheckr'));
+        wp_die(esc_html__('HostCheckr requires PHP 7.4 or higher.', 'hostcheckr'));
     }
     
     if (version_compare(get_bloginfo('version'), '5.0', '<')) {
         deactivate_plugins(plugin_basename(__FILE__));
-        wp_die(__('HostCheckr requires WordPress 5.0 or higher.', 'hostcheckr'));
+        wp_die(esc_html__('HostCheckr requires WordPress 5.0 or higher.', 'hostcheckr'));
     }
     
     // Set default options if needed
@@ -281,11 +281,11 @@ class HostCheckr
     {
         // Check user capabilities
         if (!current_user_can('manage_options')) {
-            wp_die(__('You do not have sufficient permissions to access this page.', 'hostcheckr'));
+            wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'hostcheckr'));
         }
         
         $overall_status = $this->getOverallStatus();
-        $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'overview';
+        $current_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'overview';
         ?>
         <div class="wrap hostcheckr-wrap">
             <!-- Branded Header -->
@@ -308,8 +308,8 @@ class HostCheckr
                                 </svg>
                             </div>
                             <div class="brand-info">
-                                <h1><?php _e('HostCheckr', 'hostcheckr'); ?></h1>
-                                <p class="tagline"><?php _e('Know Your Hosting. Instantly.', 'hostcheckr'); ?></p>
+                                <h1><?php esc_html_e('HostCheckr', 'hostcheckr'); ?></h1>
+                                <p class="tagline"><?php esc_html_e('Know Your Hosting. Instantly.', 'hostcheckr'); ?></p>
                             </div>
                         </div>
                         <p class="description"><?php _e('Instantly check if your hosting is slowing down your WordPress', 'hostcheckr'); ?></p>
@@ -383,13 +383,19 @@ class HostCheckr
                                 <?php if ($overall_status['summary']['critical'] > 0): ?>
                                     <span class="metric critical">
                                         <span class="dashicons dashicons-warning"></span>
-                                        <?php printf(__('%d Critical', 'hostcheckr'), $overall_status['summary']['critical']); ?>
+                                        <?php 
+                                        /* translators: %d: number of critical issues */
+                                        printf(esc_html__('%d Critical', 'hostcheckr'), (int) $overall_status['summary']['critical']); 
+                                        ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($overall_status['summary']['warnings'] > 0): ?>
                                     <span class="metric warning">
                                         <span class="dashicons dashicons-info"></span>
-                                        <?php printf(__('%d Warnings', 'hostcheckr'), $overall_status['summary']['warnings']); ?>
+                                        <?php 
+                                        /* translators: %d: number of warnings */
+                                        printf(esc_html__('%d Warnings', 'hostcheckr'), (int) $overall_status['summary']['warnings']); 
+                                        ?>
                                     </span>
                                 <?php endif; ?>
                                 <?php if ($overall_status['summary']['total'] === 0): ?>
@@ -483,7 +489,10 @@ class HostCheckr
                                     <span class="dashicons dashicons-warning"></span>
                                     <?php _e('Critical Issues', 'hostcheckr'); ?>
                                 </h3>
-                                <span class="issue-count"><?php printf(__('%d items', 'hostcheckr'), count($critical_items)); ?></span>
+                                <span class="issue-count"><?php 
+                /* translators: %d: number of items */
+                printf(esc_html__('%d items', 'hostcheckr'), count($critical_items)); 
+                ?></span>
                             </div>
                             <div class="issues-grid">
                                 <?php foreach ($critical_items as $item): ?>
@@ -522,7 +531,10 @@ class HostCheckr
                                     <span class="dashicons dashicons-info"></span>
                                     <?php _e('Optimization Opportunities', 'hostcheckr'); ?>
                                 </h3>
-                                <span class="issue-count"><?php printf(__('%d items', 'hostcheckr'), count($warning_items)); ?></span>
+                                <span class="issue-count"><?php 
+                                /* translators: %d: number of items */
+                                printf(esc_html__('%d items', 'hostcheckr'), count($warning_items)); 
+                                ?></span>
                             </div>
                             <div class="issues-grid">
                                 <?php foreach ($warning_items as $item): ?>
@@ -654,7 +666,7 @@ class HostCheckr
                                             <span class="extension-icon dashicons dashicons-<?php echo $status_class === 'success' ? 'yes-alt' : 'warning'; ?>"></span>
                                             <div class="extension-details">
                                                 <span class="extension-name"><?php echo esc_html($label); ?></span>
-                                                <span class="extension-status"><?php echo $data[2] ? __('Installed', 'hostcheckr') : __('Missing', 'hostcheckr'); ?></span>
+                                                <span class="extension-status"><?php echo $data[2] ? esc_html__('Installed', 'hostcheckr') : esc_html__('Missing', 'hostcheckr'); ?></span>
                                             </div>
                                         </div>
                                     <?php 
@@ -1205,8 +1217,10 @@ class HostCheckr
         
         // Determine overall status
         if ($critical_issues > 0) {
+            /* translators: %d: number of critical issues */
             $message = sprintf(_n('%d critical issue found that needs immediate attention', '%d critical issues found that need immediate attention', $critical_issues, 'hostcheckr'), $critical_issues);
             if ($warning_count > 0) {
+                /* translators: %d: number of warnings */
                 $message .= sprintf(_n(' and %d warning', ' and %d warnings', $warning_count, 'hostcheckr'), $warning_count);
             }
             
@@ -1225,6 +1239,7 @@ class HostCheckr
             return [
                 'class' => 'warning',
                 'icon' => 'info',
+                /* translators: %d: number of warnings */
                 'message' => sprintf(_n('%d warning found - consider optimization for better performance', '%d warnings found - consider optimization for better performance', $warning_count, 'hostcheckr'), $warning_count),
                 'details' => $warnings,
                 'summary' => [
@@ -1286,13 +1301,13 @@ class HostCheckr
             'Server OS' => $this->getServerOS(),
             'Server Architecture' => $this->getServerArchitecture(),
             'Server IP Address' => $this->getServerIP(),
-            'Document Root' => $_SERVER['DOCUMENT_ROOT'] ?? __('Not available', 'hostcheckr'),
-            'Server Admin' => $_SERVER['SERVER_ADMIN'] ?? __('Not available', 'hostcheckr'),
-            'Server Port' => $_SERVER['SERVER_PORT'] ?? __('Not available', 'hostcheckr'),
+            'Document Root' => isset($_SERVER['DOCUMENT_ROOT']) ? sanitize_text_field(wp_unslash($_SERVER['DOCUMENT_ROOT'])) : __('Not available', 'hostcheckr'),
+            'Server Admin' => isset($_SERVER['SERVER_ADMIN']) ? sanitize_email(wp_unslash($_SERVER['SERVER_ADMIN'])) : __('Not available', 'hostcheckr'),
+            'Server Port' => isset($_SERVER['SERVER_PORT']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_PORT'])) : __('Not available', 'hostcheckr'),
             'HTTPS' => $this->isHTTPS() ? __('Enabled', 'hostcheckr') : __('Disabled', 'hostcheckr'),
-            'Server Protocol' => $_SERVER['SERVER_PROTOCOL'] ?? __('Not available', 'hostcheckr'),
-            'Request Method' => $_SERVER['REQUEST_METHOD'] ?? __('Not available', 'hostcheckr'),
-            'User Agent' => $_SERVER['HTTP_USER_AGENT'] ?? __('Not available', 'hostcheckr'),
+            'Server Protocol' => isset($_SERVER['SERVER_PROTOCOL']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_PROTOCOL'])) : __('Not available', 'hostcheckr'),
+            'Request Method' => isset($_SERVER['REQUEST_METHOD']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD'])) : __('Not available', 'hostcheckr'),
+            'User Agent' => isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])) : __('Not available', 'hostcheckr'),
             'Server Load' => $this->getServerLoad(),
             'Uptime' => $this->getServerUptime(),
         ];
@@ -1539,7 +1554,7 @@ class HostCheckr
         
         // Read test
         $content = file_get_contents($test_file);
-        unlink($test_file);
+        wp_delete_file($test_file);
         
         $end_time = microtime(true);
         $duration = $end_time - $start_time;
@@ -1627,9 +1642,9 @@ class HostCheckr
             'Microsoft Azure' => ['azure', 'microsoft'],
         ];
 
-        $server_info = strtolower($_SERVER['SERVER_SOFTWARE'] ?? '');
+        $server_info = isset($_SERVER['SERVER_SOFTWARE']) ? strtolower(sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE']))) : '';
         $hostname = strtolower(gethostname());
-        $server_name = strtolower($_SERVER['SERVER_NAME'] ?? '');
+        $server_name = isset($_SERVER['SERVER_NAME']) ? strtolower(sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME']))) : '';
         
         foreach ($indicators as $provider => $keywords) {
             foreach ($keywords as $keyword) {
@@ -1699,7 +1714,7 @@ class HostCheckr
         $test_file = ABSPATH . 'wp-content/temp_fs_test.tmp';
         file_put_contents($test_file, 'test');
         $content = file_get_contents($test_file);
-        unlink($test_file);
+        wp_delete_file($test_file);
         $fs_end = microtime(true);
         $performance['fs_speed'] = round(($fs_end - $fs_start) * 1000, 2) . ' ms';
         
@@ -1725,7 +1740,7 @@ class HostCheckr
             $security['ssl_status'] = __('Enabled', 'hostcheckr');
             
             // Get SSL certificate info
-            $url = 'https://' . $_SERVER['HTTP_HOST'];
+            $url = isset($_SERVER['HTTP_HOST']) ? 'https://' . sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : 'https://localhost';
             $context = stream_context_create([
                 'ssl' => [
                     'capture_peer_cert' => true,
@@ -1735,7 +1750,7 @@ class HostCheckr
             ]);
             
             $stream = @stream_socket_client(
-                'ssl://' . $_SERVER['HTTP_HOST'] . ':443',
+                isset($_SERVER['HTTP_HOST']) ? 'ssl://' . sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) . ':443' : 'ssl://localhost:443',
                 $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context
             );
             
@@ -1745,9 +1760,10 @@ class HostCheckr
                     $cert = openssl_x509_parse($params['options']['ssl']['peer_certificate']);
                     if ($cert) {
                         $security['ssl_issuer'] = $cert['issuer']['CN'] ?? __('Unknown', 'hostcheckr');
-                        $security['ssl_expiry'] = date('Y-m-d H:i:s', $cert['validTo_time_t']);
+                        $security['ssl_expiry'] = gmdate('Y-m-d H:i:s', $cert['validTo_time_t']);
                     }
                 }
+                // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
                 fclose($stream);
             }
         } else {
@@ -1804,7 +1820,8 @@ class HostCheckr
             $hours = floor(($uptime_seconds % 86400) / 3600);
             $minutes = floor(($uptime_seconds % 3600) / 60);
             
-            return sprintf(__('%d days, %d hours, %d minutes', 'hostcheckr'), $days, $hours, $minutes);
+            /* translators: 1: days, 2: hours, 3: minutes */
+            return sprintf(__('%1$d days, %2$d hours, %3$d minutes', 'hostcheckr'), $days, $hours, $minutes);
         }
         
         return __('Not available', 'hostcheckr');
@@ -1834,7 +1851,9 @@ class HostCheckr
      */
     protected function getServerIP()
     {
-        return $_SERVER['SERVER_ADDR'] ?? $_SERVER['LOCAL_ADDR'] ?? __('Not available', 'hostcheckr');
+        $server_addr = isset($_SERVER['SERVER_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_ADDR'])) : '';
+        $local_addr = isset($_SERVER['LOCAL_ADDR']) ? sanitize_text_field(wp_unslash($_SERVER['LOCAL_ADDR'])) : '';
+        return $server_addr ?: ($local_addr ?: __('Not available', 'hostcheckr'));
     }
 
     /**
@@ -1844,9 +1863,13 @@ class HostCheckr
      */
     protected function isHTTPS()
     {
-        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || 
-               $_SERVER['SERVER_PORT'] == 443 ||
-               (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        $https = isset($_SERVER['HTTPS']) ? sanitize_text_field(wp_unslash($_SERVER['HTTPS'])) : '';
+        $server_port = isset($_SERVER['SERVER_PORT']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_PORT'])) : '';
+        $forwarded_proto = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_X_FORWARDED_PROTO'])) : '';
+        
+        return (!empty($https) && $https !== 'off') || 
+               $server_port == 443 ||
+               (!empty($forwarded_proto) && $forwarded_proto === 'https');
     }
 
     /**
@@ -2050,7 +2073,7 @@ class HostCheckr
             return __('Not detected', 'hostcheckr');
         }
         
-        $server = $_SERVER['SERVER_SOFTWARE'];
+        $server = sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE']));
         
         if (stristr($server, 'Apache') !== false) {
             return 'Apache';
