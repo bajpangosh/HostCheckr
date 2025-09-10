@@ -1,0 +1,33 @@
+name: Build WordPress Plugin ZIP
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get plugin version from hostcheckr.php
+        id: get_version
+        run: |
+          VERSION=$(grep -i "Version:" hostcheckr.php | head -n 1 | awk -F': ' '{print $2}' | tr -d '[:space:]')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build hostcheckr.zip
+        run: |
+          mkdir build
+          mkdir hostcheckr
+          rsync -av --exclude='.git*' --exclude='.github' ./ hostcheckr/
+          cd hostcheckr
+          zip -r "../build/hostcheckr-v${{ steps.get_version.outputs.version }}.zip" .
+          cd ..
+
+      - name: Upload zip to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/hostcheckr-v${{ steps.get_version.outputs.version }}.zip
