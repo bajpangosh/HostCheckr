@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-  release:
-    types: [published]
 
 jobs:
   build:
@@ -29,16 +27,10 @@ jobs:
           cd hostcheckr
           zip -r "../build/hostcheckr-v${{ steps.get_version.outputs.version }}.zip" .
           cd ..
+          cp build/hostcheckr-v${{ steps.get_version.outputs.version }}.zip build/hostcheckr-latest.zip
 
-      - name: Upload zip to release
-        if: github.event_name == 'release'
-        uses: softprops/action-gh-release@v1
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          files: build/hostcheckr-v${{ steps.get_version.outputs.version }}.zip
-
-      - name: Upload zip as artifact (for push builds)
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: hostcheckr-v${{ steps.get_version.outputs.version }}
-          path: build/hostcheckr-v${{ steps.get_version.outputs.version }}.zip
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build
