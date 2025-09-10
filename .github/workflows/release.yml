@@ -1,4 +1,4 @@
-name: Build WordPress Plugin ZIP
+name: Build WordPress Plugin ZIP update
 
 on:
   push:
