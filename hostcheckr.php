@@ -3,7 +3,7 @@
  * Plugin Name: HostCheckr
  * Plugin URI: https://hostcheckr.kloudboy.com
  * Description: Instantly check if your hosting is slowing down your WordPress. Know Your Hosting. Instantly.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Bajpan Gosh
  * Author URI: https://kloudboy.com
  * License: GPL v2 or later
@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('HOSTCHECKR_VERSION', '1.0.0');
+define('HOSTCHECKR_VERSION', '1.0.1');
 define('HOSTCHECKR_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('HOSTCHECKR_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('HOSTCHECKR_PLUGIN_FILE', __FILE__);
@@ -216,6 +216,15 @@ class HostCheckr
             __('Hosting Info', 'hostcheckr'),
             'manage_options',
             'hostcheckr&tab=hosting',
+            array($this, 'admin_page')
+        );
+
+        add_submenu_page(
+            'hostcheckr',
+            __('Performance Check', 'hostcheckr'),
+            __('Performance Check', 'hostcheckr'),
+            'manage_options',
+            'hostcheckr&tab=performance',
             array($this, 'admin_page')
         );
     }
@@ -626,6 +635,10 @@ class HostCheckr
                         <span class="dashicons dashicons-wordpress-alt"></span>
                         <span class="tab-label"><?php esc_html_e('WordPress Info', 'hostcheckr'); ?></span>
                     </button>
+                    <button class="content-tab <?php echo $current_tab === 'performance' ? 'active' : ''; ?>" data-tab="performance">
+                        <span class="dashicons dashicons-chart-line"></span>
+                        <span class="tab-label"><?php esc_html_e('Performance Check', 'hostcheckr'); ?></span>
+                    </button>
                 </div>
 
                 <!-- Tab Content -->
@@ -959,6 +972,163 @@ class HostCheckr
                                     </div>
                                 <?php endforeach; ?>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Check Tab -->
+                    <div id="tab-performance" class="tab-content <?php echo $current_tab === 'performance' ? 'active' : ''; ?>">
+                        <div class="info-section">
+                            <div class="performance-header">
+                                <h2>
+                                    <span class="dashicons dashicons-chart-line"></span>
+                                    <?php esc_html_e('Why Is My WordPress Slow?', 'hostcheckr'); ?>
+                                </h2>
+                                <p class="performance-description">
+                                    <?php esc_html_e('This diagnostic tool analyzes your WordPress installation to identify performance bottlenecks and provides actionable recommendations.', 'hostcheckr'); ?>
+                                </p>
+                            </div>
+
+                            <?php
+                            require_once HOSTCHECKR_PLUGIN_PATH . 'includes/class-hostcheckr-performance.php';
+                            $performance = new HostCheckr_Performance();
+                            $performance_issues = $performance->diagnose_performance();
+                            
+                            if (empty($performance_issues)) {
+                                ?>
+                                <div class="performance-success">
+                                    <div class="success-icon">
+                                        <span class="dashicons dashicons-yes-alt"></span>
+                                    </div>
+                                    <h3><?php esc_html_e('Great News!', 'hostcheckr'); ?></h3>
+                                    <p><?php esc_html_e('No major performance issues detected. Your WordPress site appears to be well-optimized!', 'hostcheckr'); ?></p>
+                                </div>
+                                <?php
+                            } else {
+                                // Group issues by severity
+                                $critical_issues = array_filter($performance_issues, function($issue) {
+                                    return $issue['severity'] === 'critical';
+                                });
+                                $warning_issues = array_filter($performance_issues, function($issue) {
+                                    return $issue['severity'] === 'warning';
+                                });
+                                $info_issues = array_filter($performance_issues, function($issue) {
+                                    return $issue['severity'] === 'info';
+                                });
+                                ?>
+                                
+                                <div class="performance-summary">
+                                    <div class="summary-stats">
+                                        <?php if (!empty($critical_issues)): ?>
+                                            <div class="stat-box critical">
+                                                <span class="stat-number"><?php echo count($critical_issues); ?></span>
+                                                <span class="stat-label"><?php esc_html_e('Critical Issues', 'hostcheckr'); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if (!empty($warning_issues)): ?>
+                                            <div class="stat-box warning">
+                                                <span class="stat-number"><?php echo count($warning_issues); ?></span>
+                                                <span class="stat-label"><?php esc_html_e('Warnings', 'hostcheckr'); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if (!empty($info_issues)): ?>
+                                            <div class="stat-box info">
+                                                <span class="stat-number"><?php echo count($info_issues); ?></span>
+                                                <span class="stat-label"><?php esc_html_e('Info', 'hostcheckr'); ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <?php if (!empty($critical_issues)): ?>
+                                    <div class="performance-issues-section critical-section">
+                                        <h3>
+                                            <span class="dashicons dashicons-warning"></span>
+                                            <?php esc_html_e('Critical Performance Issues', 'hostcheckr'); ?>
+                                        </h3>
+                                        <div class="performance-issues-grid">
+                                            <?php foreach ($critical_issues as $issue): ?>
+                                                <div class="performance-issue-card critical">
+                                                    <div class="issue-header">
+                                                        <h4><?php echo esc_html($issue['title']); ?></h4>
+                                                        <span class="severity-badge critical"><?php esc_html_e('Critical', 'hostcheckr'); ?></span>
+                                                    </div>
+                                                    <div class="issue-value">
+                                                        <strong><?php esc_html_e('Current:', 'hostcheckr'); ?></strong> 
+                                                        <?php echo esc_html($issue['value']); ?>
+                                                    </div>
+                                                    <div class="issue-description">
+                                                        <?php echo esc_html($issue['description']); ?>
+                                                    </div>
+                                                    <div class="issue-recommendation">
+                                                        <strong><?php esc_html_e('Recommendation:', 'hostcheckr'); ?></strong>
+                                                        <p><?php echo esc_html($issue['recommendation']); ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($warning_issues)): ?>
+                                    <div class="performance-issues-section warning-section">
+                                        <h3>
+                                            <span class="dashicons dashicons-info"></span>
+                                            <?php esc_html_e('Performance Warnings', 'hostcheckr'); ?>
+                                        </h3>
+                                        <div class="performance-issues-grid">
+                                            <?php foreach ($warning_issues as $issue): ?>
+                                                <div class="performance-issue-card warning">
+                                                    <div class="issue-header">
+                                                        <h4><?php echo esc_html($issue['title']); ?></h4>
+                                                        <span class="severity-badge warning"><?php esc_html_e('Warning', 'hostcheckr'); ?></span>
+                                                    </div>
+                                                    <div class="issue-value">
+                                                        <strong><?php esc_html_e('Current:', 'hostcheckr'); ?></strong> 
+                                                        <?php echo esc_html($issue['value']); ?>
+                                                    </div>
+                                                    <div class="issue-description">
+                                                        <?php echo esc_html($issue['description']); ?>
+                                                    </div>
+                                                    <div class="issue-recommendation">
+                                                        <strong><?php esc_html_e('Recommendation:', 'hostcheckr'); ?></strong>
+                                                        <p><?php echo esc_html($issue['recommendation']); ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($info_issues)): ?>
+                                    <div class="performance-issues-section info-section">
+                                        <h3>
+                                            <span class="dashicons dashicons-info-outline"></span>
+                                            <?php esc_html_e('Additional Information', 'hostcheckr'); ?>
+                                        </h3>
+                                        <div class="performance-issues-grid">
+                                            <?php foreach ($info_issues as $issue): ?>
+                                                <div class="performance-issue-card info">
+                                                    <div class="issue-header">
+                                                        <h4><?php echo esc_html($issue['title']); ?></h4>
+                                                        <span class="severity-badge info"><?php esc_html_e('Info', 'hostcheckr'); ?></span>
+                                                    </div>
+                                                    <div class="issue-value">
+                                                        <strong><?php esc_html_e('Current:', 'hostcheckr'); ?></strong> 
+                                                        <?php echo esc_html($issue['value']); ?>
+                                                    </div>
+                                                    <div class="issue-description">
+                                                        <?php echo esc_html($issue['description']); ?>
+                                                    </div>
+                                                    <div class="issue-recommendation">
+                                                        <strong><?php esc_html_e('Recommendation:', 'hostcheckr'); ?></strong>
+                                                        <p><?php echo esc_html($issue['recommendation']); ?></p>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>

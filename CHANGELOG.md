@@ -5,6 +5,25 @@ All notable changes to HostCheckr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2024-11-23
+
+### Added
+- **Performance Check Tab**: New comprehensive performance diagnostics feature
+- Database performance analysis (size, overhead, revisions)
+- Plugin count monitoring and recommendations
+- Theme and page builder detection
+- Caching configuration checks (object cache and page cache)
+- Server resource validation (PHP memory, execution time, PHP version)
+- Autoload data size monitoring
+- Detailed recommendations for each performance issue
+- Severity-based issue categorization (Critical, Warning, Info)
+- Visual performance dashboard with issue statistics
+
+### Enhanced
+- Better performance issue detection and reporting
+- Actionable recommendations for WordPress optimization
+- Improved user interface for performance diagnostics
+
 ## [1.0.0] - 2024-01-01
 
 ### Added

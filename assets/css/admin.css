@@ -2067,3 +2067,298 @@ OSTCHECKR BRANDING STYLES ===== */
         justify-content: center;
     }
 }
+
+/* ===
+== PERFORMANCE TAB STYLES ===== */
+.performance-header {
+    margin-bottom: 30px;
+}
+
+.performance-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    color: #1e293b;
+}
+
+.performance-description {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.performance-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.performance-success .success-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.performance-success .success-icon .dashicons {
+    width: 64px;
+    height: 64px;
+    font-size: 64px;
+}
+
+.performance-success h3 {
+    font-size: 28px;
+    margin: 0 0 10px 0;
+    color: white;
+}
+
+.performance-success p {
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.95;
+}
+
+.performance-summary {
+    margin: 30px 0;
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    background: white;
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box.critical {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.stat-box.warning {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.stat-box.info {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.stat-box .stat-number {
+    display: block;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-box.critical .stat-number {
+    color: #dc2626;
+}
+
+.stat-box.warning .stat-number {
+    color: #d97706;
+}
+
+.stat-box.info .stat-number {
+    color: #2563eb;
+}
+
+.stat-box .stat-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+}
+
+.performance-issues-section {
+    margin: 40px 0;
+}
+
+.performance-issues-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.performance-issues-section.critical-section h3 {
+    color: #dc2626;
+    border-bottom-color: #fecaca;
+}
+
+.performance-issues-section.warning-section h3 {
+    color: #d97706;
+    border-bottom-color: #fed7aa;
+}
+
+.performance-issues-section.info-section h3 {
+    color: #2563eb;
+    border-bottom-color: #bfdbfe;
+}
+
+.performance-issues-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.performance-issue-card {
+    background: white;
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.performance-issue-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.performance-issue-card.critical {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+}
+
+.performance-issue-card.warning {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+}
+
+.performance-issue-card.info {
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+}
+
+.performance-issue-card .issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.performance-issue-card .issue-header h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    flex: 1;
+}
+
+.performance-issue-card .severity-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.performance-issue-card .severity-badge.critical {
+    background: #dc2626;
+    color: white;
+}
+
+.performance-issue-card .severity-badge.warning {
+    background: #d97706;
+    color: white;
+}
+
+.performance-issue-card .severity-badge.info {
+    background: #2563eb;
+    color: white;
+}
+
+.performance-issue-card .issue-value {
+    margin-bottom: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 6px;
+    font-size: 14px;
+    color: #475569;
+}
+
+.performance-issue-card .issue-value strong {
+    color: #1e293b;
+}
+
+.performance-issue-card .issue-description {
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #64748b;
+}
+
+.performance-issue-card .issue-recommendation {
+    padding: 16px;
+    background: rgba(59, 130, 246, 0.05);
+    border-left: 3px solid #3b82f6;
+    border-radius: 6px;
+}
+
+.performance-issue-card.critical .issue-recommendation {
+    background: rgba(239, 68, 68, 0.05);
+    border-left-color: #ef4444;
+}
+
+.performance-issue-card.warning .issue-recommendation {
+    background: rgba(245, 158, 11, 0.05);
+    border-left-color: #f59e0b;
+}
+
+.performance-issue-card .issue-recommendation strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #1e293b;
+}
+
+.performance-issue-card .issue-recommendation p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #475569;
+}
+
+/* Responsive adjustments for performance tab */
+@media (max-width: 768px) {
+    .performance-issues-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-stats {
+        grid-template-columns: 1fr;
+    }
+}

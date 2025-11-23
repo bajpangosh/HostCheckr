@@ -1,6 +1,6 @@
 # HostCheckr
 
-[![WordPress Plugin Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yourusername/hostcheckr)
+[![WordPress Plugin Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/yourusername/hostcheckr)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -73,6 +73,15 @@ https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.co
 - Share with hosting providers or developers
 - Text format for easy reading
 
+### 🚀 Performance Diagnostics
+- **NEW!** Comprehensive "Why Is My WordPress Slow?" analysis
+- Database performance checks (size, overhead, revisions)
+- Plugin and theme performance monitoring
+- Caching configuration validation
+- Server resource optimization recommendations
+- Autoload data analysis
+- Severity-based issue reporting (Critical, Warning, Info)
+
 ### 🎨 Modern Interface
 - Clean, professional design
 - Mobile-responsive layout
@@ -121,6 +130,7 @@ wp plugin install hostcheckr --activate
    - **PHP Configuration** - Detailed PHP settings
    - **PHP Extensions** - Installed extensions status
    - **Server Info** - Hosting environment details
+   - **Performance Check** - Diagnose why WordPress is slow
 4. Use the **Export Report** button to generate system reports
 5. Click **Refresh** to update system information
 
@@ -249,6 +259,15 @@ Contributions are welcome! Please follow these steps:
 - Test thoroughly before submitting
 
 ## 📝 Changelog
+
+### 1.0.1 - 2024-11-23
+- **NEW:** Performance Check tab - Diagnose why WordPress is slow
+- Database performance analysis
+- Plugin and theme performance monitoring
+- Caching configuration checks
+- Server resource validation
+- Autoload data monitoring
+- Detailed optimization recommendations
 
 ### 1.0.0 - 2024-11-23
 - Initial release
