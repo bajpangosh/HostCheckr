@@ -11,9 +11,30 @@ Instantly check if your hosting is slowing down your WordPress. HostCheckr provi
 
 ## 🚀 Try it Now
 
-**[Test HostCheckr in WordPress Playground →](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/yourusername/hostcheckr/main/blueprint.json)**
+### WordPress Playground - Instant Demo
 
-No installation required! Try HostCheckr directly in your browser with WordPress Playground.
+**[Launch HostCheckr Demo →](https://playground.wordpress.net/)**
+
+Test HostCheckr instantly in your browser:
+
+1. Click the link above to open WordPress Playground
+2. Go to **Plugins → Add New Plugin → Upload Plugin**
+3. Upload the `hostcheckr.zip` file (create using `create-release.bat`)
+4. Click **Activate**
+5. Navigate to **HostCheckr** in the admin menu
+
+**Login credentials:**
+- Username: `admin`
+- Password: `password`
+
+### Alternative: Blueprint URL (After GitHub Release)
+
+Once you publish a release on GitHub:
+```
+https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/yourusername/hostcheckr/main/blueprint.json
+```
+
+> **Note:** The blueprint requires the plugin to be available as a public download. For immediate testing, use the manual upload method above.
 
 ## ✨ Features
 
@@ -122,15 +143,39 @@ wp plugin install hostcheckr --activate
 
 Test HostCheckr without any installation using WordPress Playground:
 
+### Quick Test (No Plugin Pre-installed)
+Visit [WordPress Playground](https://playground.wordpress.net/) and manually upload the plugin zip.
+
+### With Blueprint (After Publishing)
+Once your plugin is on GitHub with releases:
 ```
 https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/yourusername/hostcheckr/main/blueprint.json
 ```
 
+### Creating a Release Zip
+
+To create a distributable zip file:
+
+**Windows:**
+```cmd
+create-release.bat
+```
+
+**Linux/Mac:**
+```bash
+bash create-release.sh
+```
+
+**Manual (using zip command):**
+```bash
+zip -r hostcheckr.zip . -x "*.git*" "*.wordpress-playground*" "node_modules/*" "*.DS_Store" "*.sh" "*.bat"
+```
+
 The playground environment includes:
 - Latest WordPress version
-- HostCheckr plugin pre-installed and activated
-- Sample data for testing
-- Full admin access
+- PHP 8.2 with all extensions
+- Full admin access (username: admin, password: password)
+- Instant testing without server setup
 
 ## 🛠️ Development
 

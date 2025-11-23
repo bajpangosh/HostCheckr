@@ -20,8 +20,8 @@
     {
       "step": "installPlugin",
       "pluginZipFile": {
-        "resource": "wordpress.org/plugins",
-        "slug": "hostcheckr"
+        "resource": "url",
+        "url": "https://github.com/yourusername/hostcheckr/archive/refs/heads/main.zip"
       },
       "options": {
         "activate": true
