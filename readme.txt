@@ -4,7 +4,7 @@ Tags: hosting, system-info, performance, health-check, server-monitoring
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,21 @@ The current version uses WordPress-recommended standards. Future versions may in
 
 == Changelog ==
 
+= 1.0.1 =
+* **Performance Check Tab**: New comprehensive performance diagnostics feature
+* Database performance analysis (size, overhead, revisions)
+* Plugin count monitoring and recommendations
+* Theme and page builder detection
+* Caching configuration checks (object cache and page cache)
+* Server resource validation (PHP memory, execution time, PHP version)
+* Autoload data size monitoring
+* Detailed recommendations for each performance issue
+* Severity-based issue categorization (Critical, Warning, Info)
+* Visual performance dashboard with issue statistics
+* Better performance issue detection and reporting
+* Actionable recommendations for WordPress optimization
+* Improved user interface for performance diagnostics
+
 = 1.0.0 =
 * Initial release
 * System health overview dashboard
@@ -105,6 +120,9 @@ The current version uses WordPress-recommended standards. Future versions may in
 * Mobile-responsive interface
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+New Performance Check tab and comprehensive system diagnostics.
 
 = 1.0.0 =
 Initial release of HostCheckr - Know Your Hosting. Instantly.

@@ -1,6 +1,6 @@
 # HostCheckr
 
-[![WordPress Plugin Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/yourusername/hostcheckr)
+[![WordPress Plugin Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/bajpangosh/hostcheckr)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -31,7 +31,7 @@ Test HostCheckr instantly in your browser:
 
 Once you publish a release on GitHub:
 ```
-https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/yourusername/hostcheckr/main/blueprint.json
+https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/bajpangosh/hostcheckr/main/blueprint.json
 ```
 
 > **Note:** The blueprint requires the plugin to be available as a public download. For immediate testing, use the manual upload method above.
@@ -159,7 +159,7 @@ Visit [WordPress Playground](https://playground.wordpress.net/) and manually upl
 ### With Blueprint (After Publishing)
 Once your plugin is on GitHub with releases:
 ```
-https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/yourusername/hostcheckr/main/blueprint.json
+https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/bajpangosh/hostcheckr/main/blueprint.json
 ```
 
 ### Creating a Release Zip
@@ -193,7 +193,7 @@ The playground environment includes:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/hostcheckr.git
+git clone https://github.com/bajpangosh/hostcheckr.git
 
 # Navigate to your WordPress plugins directory
 cd wp-content/plugins/hostcheckr
@@ -286,8 +286,8 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 
 Found a bug? Please report it:
 
-1. Check [existing issues](https://github.com/yourusername/hostcheckr/issues)
-2. If not found, [create a new issue](https://github.com/yourusername/hostcheckr/issues/new)
+1. Check [existing issues](https://github.com/bajpangosh/hostcheckr/issues)
+2. If not found, [create a new issue](https://github.com/bajpangosh/hostcheckr/issues/new)
 3. Include:
    - WordPress version
    - PHP version
