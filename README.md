@@ -141,43 +141,7 @@ wp plugin install hostcheckr --activate
 - **Memory Limit:** 512M
 - **Max Execution Time:** 300 seconds
 
-## 🎮 WordPress Playground
 
-Test HostCheckr without any installation using WordPress Playground:
-
-### Quick Test (No Plugin Pre-installed)
-Visit [WordPress Playground](https://playground.wordpress.net/) and manually upload the plugin zip.
-
-### With Blueprint (After Publishing)
-Once your plugin is on GitHub with releases:
-```
-https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/bajpangosh/hostcheckr/main/blueprint.json
-```
-
-### Creating a Release Zip
-
-To create a distributable zip file:
-
-**Windows:**
-```cmd
-create-release.bat
-```
-
-**Linux/Mac:**
-```bash
-bash create-release.sh
-```
-
-**Manual (using zip command):**
-```bash
-zip -r hostcheckr.zip . -x "*.git*" "*.wordpress-playground*" "node_modules/*" "*.DS_Store" "*.sh" "*.bat"
-```
-
-The playground environment includes:
-- Latest WordPress version
-- PHP 8.2 with all extensions
-- Full admin access (username: admin, password: password)
-- Instant testing without server setup
 
 ## 🛠️ Development
 
