@@ -19,12 +19,16 @@
     },
     {
       "step": "installPlugin",
-      "pluginZipFile": {
-        "resource": "url",
-        "url": "https://github.com/yourusername/hostcheckr/archive/refs/heads/main.zip"
+      "pluginData": {
+        "resource": "git:directory",
+        "url": "https://github.com/bajpangosh/HostCheckr",
+        "ref": "HEAD"
       },
       "options": {
         "activate": true
+      },
+      "progress": {
+        "caption": "Installing HostCheckr from GitHub"
       }
     },
     {

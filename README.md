@@ -13,28 +13,20 @@ Instantly check if your hosting is slowing down your WordPress. HostCheckr provi
 
 ### WordPress Playground - Instant Demo
 
-**[Launch HostCheckr Demo →](https://playground.wordpress.net/)**
+Test HostCheckr instantly in your browser without installing anything. This demo loads the latest version directly from GitHub.
 
-Test HostCheckr instantly in your browser:
-
-1. Click the link above to open WordPress Playground
-2. Go to **Plugins → Add New Plugin → Upload Plugin**
-3. Upload the `hostcheckr.zip` file (create using `create-release.bat`)
-4. Click **Activate**
-5. Navigate to **HostCheckr** in the admin menu
+**[Launch HostCheckr Live Demo →](https://playground.wordpress.net/?gh-ensure-auth=yes&ghexport-repo-url=https%3A%2F%2Fgithub.com%2Fbajpangosh%2FHostCheckr&ghexport-content-type=plugin&ghexport-plugin=hostcheckr&ghexport-playground-root=%2Fwordpress%2Fwp-content%2Fplugins%2Fhostcheckr&ghexport-pr-action=create&ghexport-allow-include-zip=no&blueprint-url=https%3A%2F%2Fraw.githubusercontent.com%2Fbajpangosh%2FHostCheckr%2Fmain%2Fblueprint.json)**
 
 **Login credentials:**
 - Username: `admin`
 - Password: `password`
 
-### Alternative: Blueprint URL (After GitHub Release)
+The playground will:
+1. Load the latest code from GitHub
+2. Install and activate HostCheckr
+3. Set up a test environment
 
-Once you publish a release on GitHub:
-```
-https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/bajpangosh/hostcheckr/main/blueprint.json
-```
-
-> **Note:** The blueprint requires the plugin to be available as a public download. For immediate testing, use the manual upload method above.
+> **Note:** You may be asked to authorize GitHub access to clone the repository into the playground.
 
 ## ✨ Features
 
