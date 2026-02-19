@@ -1,6 +1,6 @@
 # HostCheckr
 
-[![WordPress Plugin Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/bajpangosh/hostcheckr)
+[![WordPress Plugin Version](https://img.shields.io/badge/version-1.0.2-blue.svg)](https://github.com/bajpangosh/hostcheckr)
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/license-GPL--2.0%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
