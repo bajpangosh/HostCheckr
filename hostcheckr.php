@@ -2217,8 +2217,13 @@ class HostCheckr
     protected function getServerUptime()
     {
         if (is_readable('/proc/uptime')) {
-            $uptime_seconds = (float) file_get_contents('/proc/uptime');
-            $uptime_seconds = explode(' ', $uptime_seconds)[0];
+            $uptime_raw = file_get_contents('/proc/uptime');
+            if ($uptime_raw === false) {
+                return __('Not available', 'hostcheckr');
+            }
+
+            $uptime_parts = explode(' ', trim($uptime_raw));
+            $uptime_seconds = isset($uptime_parts[0]) ? (int) floor((float) $uptime_parts[0]) : 0;
             
             $days = floor($uptime_seconds / 86400);
             $hours = floor(($uptime_seconds % 86400) / 3600);
