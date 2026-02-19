@@ -74,11 +74,26 @@ The playground will:
 - Autoload data analysis
 - Severity-based issue reporting (Critical, Warning, Info)
 
+### 🛡️ Restricted Hosting Safe Fallbacks
+- Detects when hosting security blocks system probes
+- Shows clear in-dashboard warnings for restricted capabilities
+- Uses safe fallback methods where possible (for example, gateway detection without shell access)
+- Prevents restricted environments from appearing as plugin failures
+- Includes **Lightweight Mode** (default ON for new installs) to skip heavy DB probes on shared/restrictive hosting
+
+### 🧩 WP-Config Fix Assistant (Backup-First)
+- Generates ready-to-use `wp-config.php` fix snippets for key configuration issues
+- Shows an explicit backup warning before applying config changes
+- Includes one-click **Copy wp-config fix** buttons in recommendation cards
+- Provides exact insertion guidance in `wp-config.php`
+
 ### 🎨 Modern Interface
 - Clean, professional design
 - Mobile-responsive layout
 - Accessibility compliant
-- Dark mode friendly
+- Improved keyboard accessibility and tab navigation
+- Better empty states with quick reset actions
+- Mobile UX and performance optimized for touch devices
 
 ## 📸 Screenshots
 
@@ -125,6 +140,8 @@ wp plugin install hostcheckr --activate
    - **Performance Check** - Diagnose why WordPress is slow
 4. Use the **Export Report** button to generate system reports
 5. Click **Refresh** to update system information
+6. For configuration issues, use **Copy wp-config fix** and apply changes only after a backup
+7. In **Performance Check**, use **Live Monitor Settings** to control polling interval, pattern count, and Lightweight Mode
 
 ## 📋 Requirements
 

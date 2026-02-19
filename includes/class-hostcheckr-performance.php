@@ -69,39 +69,63 @@ class HostCheckr_Performance {
     private function check_database_performance() {
         global $wpdb;
         $issues = [];
-        
-        // Check database size
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-        $db_size = $wpdb->get_var("SELECT SUM(data_length + index_length) / 1024 / 1024 AS size FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "'");
-        
-        if ($db_size > 1000) {
+        $live_db_settings = get_option('hostcheckr_live_db_settings', []);
+        $lightweight_mode = is_array($live_db_settings) && !empty($live_db_settings['lightweight_mode']);
+
+        if ($lightweight_mode) {
             $issues[] = [
-                'title' => __('Large Database Size', 'hostcheckr'),
-                'severity' => 'warning',
-                'value' => round($db_size, 2) . ' MB',
-                'description' => __('Your database is quite large which can slow down queries.', 'hostcheckr'),
-                'recommendation' => __('Consider cleaning up old revisions, spam comments, and transients.', 'hostcheckr'),
+                'title' => __('Lightweight Mode Active', 'hostcheckr'),
+                'severity' => 'info',
+                'value' => __('Enabled', 'hostcheckr'),
+                'description' => __('Heavy database probes are skipped to reduce load on restrictive/shared hosting.', 'hostcheckr'),
+                'recommendation' => __('Disable lightweight mode in Live Monitor Settings if you need full database size/overhead analysis.', 'hostcheckr'),
             ];
         }
         
-        // Check for table overhead
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-        $overhead = $wpdb->get_results("SELECT table_name, data_free FROM information_schema.TABLES WHERE table_schema = '" . DB_NAME . "' AND data_free > 0");
+        // Check database size
+        if (!$lightweight_mode) {
+            $db_size_query = $wpdb->prepare(
+                'SELECT SUM(data_length + index_length) / 1024 / 1024 AS size FROM information_schema.TABLES WHERE table_schema = %s',
+                DB_NAME
+            );
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $db_size = $wpdb->get_var($db_size_query);
         
-        if (!empty($overhead)) {
-            $total_overhead = 0;
-            foreach ($overhead as $table) {
-                $total_overhead += $table->data_free;
-            }
-            
-            if ($total_overhead > 10485760) { // 10MB
+            if ($db_size > 1000) {
                 $issues[] = [
-                    'title' => __('Database Tables Need Optimization', 'hostcheckr'),
+                    'title' => __('Large Database Size', 'hostcheckr'),
                     'severity' => 'warning',
-                    'value' => round($total_overhead / 1024 / 1024, 2) . ' MB overhead',
-                    'description' => __('Your database tables have overhead that can be optimized.', 'hostcheckr'),
-                    'recommendation' => __('Run database optimization using a plugin like WP-Optimize.', 'hostcheckr'),
+                    'value' => round($db_size, 2) . ' MB',
+                    'description' => __('Your database is quite large which can slow down queries.', 'hostcheckr'),
+                    'recommendation' => __('Consider cleaning up old revisions, spam comments, and transients.', 'hostcheckr'),
                 ];
+            }
+        }
+        
+        // Check for table overhead
+        if (!$lightweight_mode) {
+            $overhead_query = $wpdb->prepare(
+                'SELECT table_name, data_free FROM information_schema.TABLES WHERE table_schema = %s AND data_free > 0',
+                DB_NAME
+            );
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $overhead = $wpdb->get_results($overhead_query);
+            
+            if (!empty($overhead)) {
+                $total_overhead = 0;
+                foreach ($overhead as $table) {
+                    $total_overhead += $table->data_free;
+                }
+                
+                if ($total_overhead > 10485760) { // 10MB
+                    $issues[] = [
+                        'title' => __('Database Tables Need Optimization', 'hostcheckr'),
+                        'severity' => 'warning',
+                        'value' => round($total_overhead / 1024 / 1024, 2) . ' MB overhead',
+                        'description' => __('Your database tables have overhead that can be optimized.', 'hostcheckr'),
+                        'recommendation' => __('Run database optimization using a plugin like WP-Optimize.', 'hostcheckr'),
+                    ];
+                }
             }
         }
         

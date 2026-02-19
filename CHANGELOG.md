@@ -5,6 +5,31 @@ All notable changes to HostCheckr will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-02-19
+
+### Added
+- Live Database Monitor in the Performance tab with real-time polling
+- Live monitor metrics for DB response time, autoload size, revisions, thread count, slow queries, and database size
+- Slow query pattern analysis with normalized signatures and top-pattern grouping
+- Live monitor settings panel with controls for enable/disable, polling interval, and max pattern count
+- Optional Lightweight Mode toggle to skip heavy `information_schema` and `SHOW STATUS` probes
+- Lightweight Mode default enabled for new installs
+- In-dashboard restricted-hosting warning panel for blocked probes and limited capabilities
+- One-click copy button for generated `wp-config.php` fix snippets
+
+### Enhanced
+- Improved submenu routing for tab-based navigation in wp-admin
+- Better accessibility and keyboard navigation for tab interfaces
+- Improved empty states with reset actions
+- Mobile UX improvements for spacing, tap targets, and small-screen readability
+- Mobile performance tuning by reducing expensive effects on touch devices
+- Live monitor fallback behavior for restricted/shared hosting
+
+### Security
+- Added secure AJAX endpoint for saving live monitor settings with nonce and capability checks
+- Improved SQL safety by using prepared queries for schema lookups where applicable
+- Additional runtime hardening for restricted environments (`shell_exec`/file access guards)
+
 ## [1.0.1] - 2024-11-23
 
 ### Added

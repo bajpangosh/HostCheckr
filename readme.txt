@@ -24,6 +24,9 @@ HostCheckr is a comprehensive WordPress plugin that provides instant insights in
 * **WordPress Compatibility Check** - Ensure your setup meets WordPress standards
 * **Export System Reports** - Generate detailed reports for troubleshooting
 * **Real-time Monitoring** - Refresh system information on demand
+* **Restricted Hosting Safe Fallbacks** - Clear warnings for blocked probes with safe fallback checks
+* **WP-Config Fix Assistant** - Backup-first `wp-config.php` snippets with one-click copy support
+* **Live DB Monitor Settings** - Configure polling interval, pattern count, and Lightweight Mode from dashboard
 
 **Perfect For:**
 
@@ -74,6 +77,14 @@ Yes, you can export detailed system reports in text format for sharing with host
 
 Yes, HostCheckr works with any hosting provider that supports WordPress. It automatically detects your hosting environment and provides relevant information.
 
+= My host blocks some server reads/commands. Will HostCheckr still work? =
+
+Yes. HostCheckr detects restricted hosting environments, shows clear warnings, and uses safe fallback checks where available.
+
+= What is Lightweight Mode? =
+
+Lightweight Mode skips heavy database probes (`information_schema` and `SHOW STATUS` queries) to reduce load on restrictive/shared hosting. It is enabled by default for new installs and can be changed in Live Monitor Settings.
+
 = Does this plugin require any external services? =
 
 No, HostCheckr works entirely within your WordPress installation and doesn't connect to any external services.
@@ -81,6 +92,10 @@ No, HostCheckr works entirely within your WordPress installation and doesn't con
 = Can I customize the requirements and recommendations? =
 
 The current version uses WordPress-recommended standards. Future versions may include customization options.
+
+= Can HostCheckr edit wp-config.php automatically? =
+
+No. HostCheckr provides copy-ready `wp-config.php` snippets and backup-first guidance. Apply changes manually via File Manager, SFTP, or SSH.
 
 == Screenshots ==
 
@@ -107,6 +122,11 @@ The current version uses WordPress-recommended standards. Future versions may in
 * Better performance issue detection and reporting
 * Actionable recommendations for WordPress optimization
 * Improved user interface for performance diagnostics
+* Restricted hosting warnings and safe fallbacks for blocked environments
+* Backup-first `wp-config.php` recommendation snippets with one-click copy support
+* Improved dashboard accessibility, keyboard navigation, and mobile UX performance
+* Live Database Monitor with configurable polling and slow query pattern analysis
+* Lightweight Mode (default ON for new installs) for better performance on shared/restrictive hosting
 
 = 1.0.0 =
 * Initial release

@@ -1,29 +1,88 @@
 jQuery(document).ready(function($) {
+    const $tabs = $('.content-tab');
+    const $panels = $('.tab-content');
+    const tabStorageKey = 'wp-system-info-active-tab';
+
+    function setUrlTab(tab) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', tab);
+        window.history.replaceState({}, '', url.toString());
+    }
+
+    function updateTabAccessibility(activeTab) {
+        $tabs.each(function(index) {
+            const tabId = $(this).data('tab');
+            const isActive = tabId === activeTab;
+            const buttonId = 'hostcheckr-tab-' + tabId;
+            const panelId = 'tab-' + tabId;
+
+            $(this).attr({
+                id: buttonId,
+                role: 'tab',
+                'aria-controls': panelId,
+                'aria-selected': isActive ? 'true' : 'false',
+                tabindex: isActive ? '0' : '-1',
+                'data-tab-index': index
+            });
+        });
+
+        $panels.each(function() {
+            const panelId = $(this).attr('id');
+            const tabId = panelId.replace('tab-', '');
+            const isActive = tabId === activeTab;
+            $(this).attr({
+                role: 'tabpanel',
+                'aria-labelledby': 'hostcheckr-tab-' + tabId,
+                'aria-hidden': isActive ? 'false' : 'true'
+            });
+        });
+    }
+
+    function setActiveTab(targetTab, syncUrl = true) {
+        const $targetTab = $('.content-tab[data-tab="' + targetTab + '"]');
+        const $targetPanel = $('#tab-' + targetTab);
+        if (!$targetTab.length || !$targetPanel.length) {
+            return;
+        }
+
+        $tabs.removeClass('active');
+        $panels.removeClass('active');
+        $targetTab.addClass('active');
+        $targetPanel.addClass('active');
+
+        try {
+            localStorage.setItem(tabStorageKey, targetTab);
+        } catch (e) {
+            // Ignore localStorage failures.
+        }
+
+        if (syncUrl) {
+            setUrlTab(targetTab);
+        }
+
+        updateTabAccessibility(targetTab);
+        $targetPanel.find('.modern-table').addClass('loaded');
+    }
+
     // ===== TAB SWITCHING FUNCTIONALITY =====
     $('.content-tab').on('click', function(e) {
         e.preventDefault();
-        
-        const targetTab = $(this).data('tab');
-        
-        // Remove active class from all tabs and content
-        $('.content-tab').removeClass('active');
-        $('.tab-content').removeClass('active');
-        
-        // Add active class to clicked tab and corresponding content
-        $(this).addClass('active');
-        $('#tab-' + targetTab).addClass('active');
-        
-        // Store active tab in localStorage
-        localStorage.setItem('wp-system-info-active-tab', targetTab);
-        
-        // Trigger animations for newly visible content
-        $('#tab-' + targetTab + ' .modern-table').addClass('loaded');
+        setActiveTab($(this).data('tab'));
     });
-    
-    // Restore active tab from localStorage
-    const activeTab = localStorage.getItem('wp-system-info-active-tab');
-    if (activeTab && $('.content-tab[data-tab="' + activeTab + '"]').length) {
-        $('.content-tab[data-tab="' + activeTab + '"]').trigger('click');
+
+    // Restore active tab from URL first, then localStorage.
+    const urlTab = new URLSearchParams(window.location.search).get('tab');
+    let storedTab = null;
+    try {
+        storedTab = localStorage.getItem(tabStorageKey);
+    } catch (e) {
+        storedTab = null;
+    }
+    const initialTab = (urlTab && $('.content-tab[data-tab="' + urlTab + '"]').length)
+        ? urlTab
+        : ((storedTab && $('.content-tab[data-tab="' + storedTab + '"]').length) ? storedTab : $('.content-tab.active').data('tab'));
+    if (initialTab) {
+        setActiveTab(initialTab, !urlTab);
     }
     
     // ===== HEALTH DETAILS TOGGLE =====
@@ -82,9 +141,21 @@ jQuery(document).ready(function($) {
         $container.find('.no-results').remove();
         
         if (visibleItems.length === 0) {
-            $container.append('<div class="no-results"><p>No items match the current filter.</p></div>');
+            $container.append(
+                '<div class="no-results">' +
+                    '<p>No items match your current filter/search.</p>' +
+                    '<button type="button" class="button button-secondary reset-results-btn">Clear filters</button>' +
+                '</div>'
+            );
         }
     }
+
+    $(document).on('click', '.reset-results-btn', function() {
+        $('#system-info-search').val('');
+        $('.filter-tab').removeClass('active');
+        $('.filter-tab[data-filter="all"]').addClass('active');
+        applyFilter('all');
+    });
     
     // ===== SEARCH FUNCTIONALITY =====
     let searchTimeout;
@@ -129,6 +200,24 @@ jQuery(document).ready(function($) {
                 showNotification('Copied to clipboard!', 'success');
             }).catch(function() {
                 // Fallback for older browsers
+                fallbackCopyTextToClipboard(text);
+            });
+        } else {
+            fallbackCopyTextToClipboard(text);
+        }
+    });
+
+    $(document).on('click', '.copy-config-btn', function() {
+        const text = $(this).data('copy');
+        if (!text) {
+            showNotification('Nothing to copy', 'error');
+            return;
+        }
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(function() {
+                showNotification('wp-config fix copied!', 'success');
+            }).catch(function() {
                 fallbackCopyTextToClipboard(text);
             });
         } else {
@@ -295,6 +384,144 @@ jQuery(document).ready(function($) {
         
         showNotification('System report exported successfully!', 'success');
     }
+
+    // ===== LIVE DATABASE MONITOR =====
+    let liveDbInterval = null;
+    let liveDbLoading = false;
+    let liveDbSettings = Object.assign({ enabled: true, interval: 10, max_patterns: 5, lightweight_mode: false }, hostcheckr_ajax.live_db_settings || {});
+
+    function hydrateLiveDbSettingsForm() {
+        $('#live-db-enabled').prop('checked', !!liveDbSettings.enabled);
+        $('#live-db-interval').val(liveDbSettings.interval || 10);
+        $('#live-db-max-patterns').val(liveDbSettings.max_patterns || 5);
+        $('#live-db-lightweight-mode').prop('checked', !!liveDbSettings.lightweight_mode);
+    }
+
+    function renderLiveDbMetrics(metrics) {
+        const fields = ['response_ms', 'autoload_mb', 'db_size_mb', 'revisions', 'threads_connected', 'slow_queries'];
+        fields.forEach((field) => {
+            const value = metrics && metrics[field] ? metrics[field] : 'Not available';
+            $('[data-db-metric="' + field + '"]').text(value);
+        });
+
+        const sampledAt = metrics && metrics.sampled_at ? metrics.sampled_at : '';
+        if (sampledAt) {
+            $('#live-db-last-updated').text('Updated: ' + sampledAt);
+        }
+
+        const warnings = (metrics && Array.isArray(metrics.warnings)) ? metrics.warnings : [];
+        if (warnings.length) {
+            const warningHtml = '<ul>' + warnings.map((item) => '<li>' + item + '</li>').join('') + '</ul>';
+            $('#live-db-warnings').html(warningHtml).show();
+        } else {
+            $('#live-db-warnings').hide().empty();
+        }
+
+        const patterns = (metrics && Array.isArray(metrics.slow_query_patterns)) ? metrics.slow_query_patterns : [];
+        if (patterns.length) {
+            const rows = patterns.map((item) => {
+                const sig = item.signature || '';
+                const count = item.count || 0;
+                const avg = item.avg_time || 0;
+                const max = item.max_time || 0;
+                return (
+                    '<div class="live-db-pattern-row">' +
+                        '<code class="live-db-pattern-signature">' + sig + '</code>' +
+                        '<div class="live-db-pattern-metrics">' +
+                            '<span>Count: ' + count + '</span>' +
+                            '<span>Avg: ' + avg + 's</span>' +
+                            '<span>Max: ' + max + 's</span>' +
+                        '</div>' +
+                    '</div>'
+                );
+            }).join('');
+
+            $('#live-db-patterns').html('<h4>Top Slow Query Patterns</h4>' + rows).show();
+        } else {
+            $('#live-db-patterns').hide().empty();
+        }
+    }
+
+    function fetchLiveDbMetrics() {
+        if (!liveDbSettings.enabled) {
+            return;
+        }
+
+        if (liveDbLoading || !$('#live-db-monitor').length) {
+            return;
+        }
+        liveDbLoading = true;
+
+        $.post(hostcheckr_ajax.ajax_url, {
+            action: 'hostcheckr_live_db_metrics',
+            nonce: hostcheckr_ajax.nonce
+        }).done(function(response) {
+            if (response && response.success && response.data) {
+                renderLiveDbMetrics(response.data);
+            } else {
+                showNotification(hostcheckr_ajax.strings.live_db_unavailable || 'Live database monitoring is temporarily unavailable.', 'error');
+            }
+        }).fail(function() {
+            showNotification(hostcheckr_ajax.strings.live_db_unavailable || 'Live database monitoring is temporarily unavailable.', 'error');
+        }).always(function() {
+            liveDbLoading = false;
+        });
+    }
+
+    function manageLiveDbMonitor() {
+        const isPerformanceTab = $('#tab-performance').hasClass('active');
+        if (!isPerformanceTab || !liveDbSettings.enabled) {
+            if (liveDbInterval) {
+                clearInterval(liveDbInterval);
+                liveDbInterval = null;
+            }
+            if (!liveDbSettings.enabled) {
+                $('#live-db-last-updated').text('Live monitor disabled');
+            }
+            return;
+        }
+
+        fetchLiveDbMetrics();
+        if (!liveDbInterval) {
+            const interval = (parseInt(liveDbSettings.interval, 10) || 10) * 1000;
+            liveDbInterval = setInterval(fetchLiveDbMetrics, interval);
+        }
+    }
+
+    $('#live-db-refresh-btn').on('click', function() {
+        fetchLiveDbMetrics();
+    });
+
+    $('#live-db-save-settings').on('click', function() {
+        const enabled = $('#live-db-enabled').is(':checked') ? '1' : '0';
+        const interval = parseInt($('#live-db-interval').val(), 10) || 10;
+        const maxPatterns = parseInt($('#live-db-max-patterns').val(), 10) || 5;
+        const lightweightMode = $('#live-db-lightweight-mode').is(':checked') ? '1' : '0';
+
+        $.post(hostcheckr_ajax.ajax_url, {
+            action: 'hostcheckr_save_live_db_settings',
+            nonce: hostcheckr_ajax.nonce,
+            enabled: enabled,
+            interval: interval,
+            max_patterns: maxPatterns,
+            lightweight_mode: lightweightMode
+        }).done(function(response) {
+            if (response && response.success && response.data && response.data.settings) {
+                liveDbSettings = response.data.settings;
+                hydrateLiveDbSettingsForm();
+                if (liveDbInterval) {
+                    clearInterval(liveDbInterval);
+                    liveDbInterval = null;
+                }
+                manageLiveDbMonitor();
+                showNotification(hostcheckr_ajax.strings.live_db_saved || 'Live monitor settings saved.', 'success');
+            } else {
+                showNotification(hostcheckr_ajax.strings.error || 'Error occurred', 'error');
+            }
+        }).fail(function() {
+            showNotification(hostcheckr_ajax.strings.error || 'Error occurred', 'error');
+        });
+    });
     
     // ===== SMOOTH ANIMATIONS =====
     // Add loading animation for tables
@@ -312,8 +539,8 @@ jQuery(document).ready(function($) {
     // ===== KEYBOARD NAVIGATION =====
     $(document).on('keydown', function(e) {
         // Tab navigation with keyboard
-        if (e.altKey && e.keyCode >= 49 && e.keyCode <= 53) { // Alt + 1-5
-            const tabIndex = e.keyCode - 49;
+        if (e.altKey && e.key >= '1' && e.key <= '9') { // Alt + 1-9
+            const tabIndex = parseInt(e.key, 10) - 1;
             const $tabs = $('.content-tab');
             if ($tabs.eq(tabIndex).length) {
                 $tabs.eq(tabIndex).trigger('click');
@@ -321,61 +548,62 @@ jQuery(document).ready(function($) {
             }
         }
         
-        // Search focus with Ctrl/Cmd + F
-        if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+        // Quick focus search with "/" unless typing in a field.
+        const isTypingField = /input|textarea|select/i.test((e.target.tagName || '')) || $(e.target).is('[contenteditable="true"]');
+        if (!isTypingField && e.key === '/') {
             $('#system-info-search').focus();
-            e.preventDefault();
-        }
-        
-        // Refresh with F5 or Ctrl/Cmd + R
-        if (e.keyCode === 116 || ((e.ctrlKey || e.metaKey) && e.keyCode === 82)) {
-            $('.refresh-btn').trigger('click');
             e.preventDefault();
         }
     });
     
     // ===== ACCESSIBILITY IMPROVEMENTS =====
     // Add ARIA labels and roles
-    $('.content-tab').attr('role', 'tab');
-    $('.tab-content').attr('role', 'tabpanel');
+    $('.content-tabs-nav').attr({
+        role: 'tablist',
+        'aria-label': 'HostCheckr sections'
+    });
     $('.filter-tab').attr('role', 'button');
-    
-    // Announce tab changes to screen readers
+
+    const $liveRegion = $('<div id="hostcheckr-live-region" class="sr-only" aria-live="polite"></div>');
+    $('body').append($liveRegion);
+
     $('.content-tab').on('click', function() {
         const tabName = $(this).find('.tab-label').text();
-        $('<div class="sr-only" aria-live="polite">Switched to ' + tabName + ' tab</div>')
-            .appendTo('body')
-            .delay(1000)
-            .remove();
+        $liveRegion.text('Switched to ' + tabName + ' tab');
+        setTimeout(manageLiveDbMonitor, 0);
     });
-    
-    // ===== PERFORMANCE OPTIMIZATIONS =====
-    // Lazy load content for inactive tabs
-    let tabsLoaded = { overview: true };
-    
-    $('.content-tab').on('click', function() {
-        const tabId = $(this).data('tab');
-        if (!tabsLoaded[tabId]) {
-            // Add loading indicator
-            const $tabContent = $('#tab-' + tabId);
-            $tabContent.append('<div class="loading-indicator">Loading...</div>');
-            
-            // Simulate content loading (in real implementation, this might load via AJAX)
-            setTimeout(() => {
-                $tabContent.find('.loading-indicator').remove();
-                tabsLoaded[tabId] = true;
-            }, 300);
+
+    // Arrow-key navigation between tabs.
+    $('.content-tab').on('keydown', function(e) {
+        const currentIndex = parseInt($(this).attr('data-tab-index'), 10) || 0;
+        let nextIndex = null;
+
+        if (e.key === 'ArrowRight') {
+            nextIndex = (currentIndex + 1) % $tabs.length;
+        } else if (e.key === 'ArrowLeft') {
+            nextIndex = (currentIndex - 1 + $tabs.length) % $tabs.length;
+        } else if (e.key === 'Home') {
+            nextIndex = 0;
+        } else if (e.key === 'End') {
+            nextIndex = $tabs.length - 1;
+        } else if (e.key === ' ' || e.key === 'Enter') {
+            setActiveTab($(this).data('tab'));
+            e.preventDefault();
+            return;
+        }
+
+        if (nextIndex !== null) {
+            $tabs.eq(nextIndex).focus();
+            e.preventDefault();
         }
     });
     
     // ===== INITIALIZATION =====
-    // Set initial state
-    showNotification('System information loaded successfully', 'success');
-    
-    // Add version info to console for debugging
-    console.log('HostCheckr - Know Your Hosting. Instantly.');
-    console.log('Developed by Bajpan Gosh for KloudBoy');
-    console.log('Plugin URI: https://hostcheckr.kloudboy.com');
-    console.log('Version: 1.0.0');
-    console.log('Loaded at:', new Date().toISOString());
+    const checkedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (!$('.last-checked-pill').length) {
+        $('.header-actions').prepend('<span class="last-checked-pill">Last checked ' + checkedAt + '</span>');
+    }
+
+    hydrateLiveDbSettingsForm();
+    manageLiveDbMonitor();
 });

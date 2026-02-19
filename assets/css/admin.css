@@ -36,6 +36,35 @@ body.wp-admin .hostcheckr-wrap {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
+.hostcheckr-restriction-warning {
+    margin: 0 0 20px 0;
+    padding: 16px 18px;
+    border: 1px solid #fcd34d;
+    border-left: 4px solid #f59e0b;
+    border-radius: 10px;
+    background: #fffbeb;
+}
+
+.hostcheckr-restriction-warning h3 {
+    margin: 0 0 8px 0;
+    color: #92400e;
+    font-size: 16px;
+}
+
+.hostcheckr-restriction-warning p {
+    margin: 0 0 8px 0;
+    color: #78350f;
+}
+
+.hostcheckr-restriction-warning ul {
+    margin: 8px 0 0 18px;
+    color: #78350f;
+}
+
+.hostcheckr-restriction-warning li {
+    margin-bottom: 4px;
+}
+
 .wp-system-info-wrap .header-content {
     display: flex;
     justify-content: space-between;
@@ -132,6 +161,11 @@ body.wp-admin .hostcheckr-wrap {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
+    position: sticky;
+    top: 42px;
+    z-index: 20;
+    background: #f0f0f1;
+    padding: 8px 0;
 }
 
 .stat-item {
@@ -517,6 +551,50 @@ body.wp-admin .hostcheckr-wrap {
     line-height: 1.5;
 }
 
+.recommendation-snippet {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    background: #f8fbff;
+}
+
+.recommendation-backup {
+    margin: 0 0 8px 0;
+    color: #9a3412;
+    font-size: 0.85em;
+}
+
+.recommendation-insert {
+    margin: 0 0 8px 0;
+    color: #1e3a8a;
+    font-size: 0.85em;
+}
+
+.recommendation-snippet pre {
+    margin: 0;
+    padding: 10px;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #e2e8f0;
+    overflow-x: auto;
+}
+
+.recommendation-snippet code {
+    font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.recommendation-actions {
+    margin-top: 10px;
+}
+
+.copy-config-btn.button {
+    min-height: 36px;
+    border-color: #bfdbfe;
+}
+
 /* ===== SEARCH AND FILTER BAR ===== */
 .search-filter-bar {
     background: #fff;
@@ -630,6 +708,12 @@ body.wp-admin .hostcheckr-wrap {
 }
 
 .content-tab.active {
+    color: #0073aa;
+    background: #fff;
+    border-bottom-color: #0073aa;
+}
+
+.content-tab[aria-selected="true"] {
     color: #0073aa;
     background: #fff;
     border-bottom-color: #0073aa;
@@ -1039,6 +1123,52 @@ body.wp-admin .hostcheckr-wrap {
     background: #0ea5e9;
 }
 
+.last-checked-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid #dbeafe;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 8px 12px;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
+.no-results {
+    margin-top: 16px;
+    padding: 20px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.no-results p {
+    margin: 0 0 12px 0;
+    color: #475569;
+    font-weight: 500;
+}
+
+.reset-results-btn.button {
+    border-color: #cbd5e1;
+}
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fadeInUp {
     from {
@@ -1072,6 +1202,12 @@ body.wp-admin .hostcheckr-wrap {
 }
 
 @media (max-width: 768px) {
+    .quick-stats-bar {
+        position: static;
+        top: auto;
+        padding: 0;
+    }
+
     .wp-system-info-wrap .header-content {
         flex-direction: column;
         gap: 20px;
@@ -1160,6 +1296,14 @@ body.wp-admin .hostcheckr-wrap {
 .toggle-details-btn:focus,
 button:focus {
     outline: 2px solid #0073aa;
+    outline-offset: 2px;
+}
+
+.content-tab:focus-visible,
+.filter-tab:focus-visible,
+.toggle-details-btn:focus-visible,
+button:focus-visible {
+    outline: 3px solid #0369a1;
     outline-offset: 2px;
 }
 
@@ -2090,6 +2234,168 @@ OSTCHECKR BRANDING STYLES ===== */
     margin: 0;
 }
 
+.live-db-monitor {
+    margin: 20px 0 28px 0;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    background: #f8fbff;
+    padding: 18px;
+}
+
+.live-db-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.live-db-header h3 {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: 18px;
+}
+
+.live-db-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.live-db-last-updated {
+    font-size: 12px;
+    color: #334155;
+}
+
+.live-db-description {
+    margin: 10px 0 14px 0;
+    color: #475569;
+}
+
+.live-db-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.live-db-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.live-db-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.live-db-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.live-db-warnings {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+    background: #fffbeb;
+    color: #92400e;
+    font-size: 13px;
+}
+
+.live-db-warnings ul {
+    margin: 0 0 0 18px;
+}
+
+.live-db-patterns {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #c7d2fe;
+    border-radius: 8px;
+    background: #eef2ff;
+}
+
+.live-db-patterns h4 {
+    margin: 0 0 10px 0;
+    color: #3730a3;
+}
+
+.live-db-pattern-row {
+    border-top: 1px solid #c7d2fe;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.live-db-pattern-row:first-of-type {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.live-db-pattern-signature {
+    display: block;
+    padding: 8px;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.live-db-pattern-metrics {
+    margin-top: 6px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #334155;
+    font-weight: 600;
+}
+
+.live-db-settings {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+}
+
+.live-db-settings h4 {
+    margin: 0 0 10px 0;
+    color: #1d4ed8;
+}
+
+.live-db-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.live-db-setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.live-db-setting-item input[type="number"] {
+    max-width: 180px;
+}
+
+.live-db-settings-actions {
+    margin-top: 10px;
+}
+
 .performance-success {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
@@ -2360,5 +2666,220 @@ OSTCHECKR BRANDING STYLES ===== */
     
     .summary-stats {
         grid-template-columns: 1fr;
+    }
+
+    .live-db-header,
+    .live-db-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .live-db-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== MOBILE UX REFINEMENTS ===== */
+@media (max-width: 768px) {
+    .hostcheckr-wrap {
+        margin: 12px 0 0 0;
+    }
+
+    .hostcheckr-wrap .hostcheckr-header,
+    .health-card,
+    .health-issues-section,
+    .tab-content,
+    .support-details,
+    .hosting-section-content,
+    .resource-card,
+    .performance-issue-card {
+        padding: 18px;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    #system-info-search {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .filter-tabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .filter-tab {
+        min-height: 44px;
+        font-size: 13px;
+        text-align: center;
+        padding: 10px 8px;
+    }
+
+    .content-tabs-nav {
+        gap: 6px;
+        padding: 8px;
+        background: #f1f5f9;
+    }
+
+    .content-tab {
+        min-height: 44px;
+        padding: 12px 14px;
+        font-size: 14px;
+        border-radius: 8px;
+        border-bottom: none;
+    }
+
+    .content-tab.active,
+    .content-tab[aria-selected="true"] {
+        border-bottom: none;
+        box-shadow: inset 0 0 0 2px rgba(0, 115, 170, 0.2);
+    }
+
+    .last-checked-pill {
+        width: 100%;
+        justify-content: center;
+        margin: 0 0 8px 0;
+    }
+
+    .wp-system-info-wrap .header-actions .refresh-btn,
+    .wp-system-info-wrap .header-actions .export-btn,
+    .hostcheckr-wrap .header-actions .refresh-btn,
+    .hostcheckr-wrap .header-actions .export-btn {
+        min-height: 44px;
+    }
+
+    .table-container {
+        border-radius: 10px;
+    }
+
+    .modern-table {
+        min-width: 640px;
+    }
+
+    .modern-table thead th,
+    .modern-table tbody td {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .column-setting code {
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .issue-card,
+    .extension-card,
+    .server-info-item,
+    .info-item,
+    .hosting-section,
+    .resource-card,
+    .performance-issue-card {
+        border-radius: 10px;
+    }
+
+    .health-metrics .metric {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .footer-links {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .footer-links a {
+        display: block;
+        text-align: center;
+        min-height: 44px;
+        line-height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hostcheckr-wrap .hostcheckr-header {
+        padding: 14px;
+    }
+
+    .brand-info h1 {
+        font-size: 1.8em !important;
+    }
+
+    .tagline {
+        font-size: 0.75em;
+        letter-spacing: 0.8px;
+    }
+
+    .health-title h2,
+    .performance-header h2 {
+        font-size: 1.25em;
+    }
+
+    .summary-stats .stat-box {
+        padding: 16px;
+    }
+
+    .stat-box .stat-number {
+        font-size: 36px;
+    }
+
+    .support-header,
+    .support-details {
+        padding: 16px;
+    }
+
+    .feature-badge {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ===== MOBILE PERFORMANCE TUNING ===== */
+@media (max-width: 768px) {
+    /* Disable expensive hover transforms/shadows on touch devices */
+    .stat-item:hover,
+    .issue-card:hover,
+    .extension-card:hover,
+    .resource-card:hover,
+    .hosting-section:hover,
+    .performance-issue-card:hover,
+    .support-card:hover,
+    .service-item:hover,
+    .feature-badge:hover,
+    .wp-system-info-wrap .header-actions .refresh-btn:hover,
+    .wp-system-info-wrap .header-actions .export-btn:hover,
+    .hostcheckr-wrap .header-actions .refresh-btn:hover,
+    .hostcheckr-wrap .header-actions .export-btn:hover {
+        transform: none;
+        box-shadow: none !important;
+    }
+
+    /* Simplify heavy effects */
+    .support-header {
+        backdrop-filter: none;
+    }
+
+    .modern-table {
+        animation: none;
+    }
+
+    .resource-loading::before {
+        animation-duration: 1.6s;
+    }
+
+    /* Lighter static shadows for paint/composite cost */
+    .hostcheckr-wrap .hostcheckr-header,
+    .health-card,
+    .content-tabs-container,
+    .support-card,
+    .resource-card,
+    .hosting-section,
+    .performance-issue-card,
+    .wp-system-info-notification {
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
     }
 }

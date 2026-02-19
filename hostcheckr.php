@@ -61,6 +61,15 @@ function hostcheckr_activate() {
     if (!get_option('hostcheckr_version')) {
         add_option('hostcheckr_version', HOSTCHECKR_VERSION);
     }
+
+    if (false === get_option('hostcheckr_live_db_settings', false)) {
+        add_option('hostcheckr_live_db_settings', [
+            'enabled' => true,
+            'interval' => 10,
+            'max_patterns' => 5,
+            'lightweight_mode' => true,
+        ]);
+    }
 }
 
 /**
@@ -162,6 +171,8 @@ class HostCheckr
     {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
+        add_action('wp_ajax_hostcheckr_live_db_metrics', array($this, 'ajax_live_db_metrics'));
+        add_action('wp_ajax_hostcheckr_save_live_db_settings', array($this, 'ajax_save_live_db_settings'));
 
     }
 
@@ -197,7 +208,7 @@ class HostCheckr
             __('System Health', 'hostcheckr'),
             __('System Health', 'hostcheckr'),
             'manage_options',
-            'hostcheckr&tab=overview',
+            'hostcheckr-overview',
             array($this, 'admin_page')
         );
 
@@ -206,7 +217,7 @@ class HostCheckr
             __('Server Resources', 'hostcheckr'),
             __('Server Resources', 'hostcheckr'),
             'manage_options',
-            'hostcheckr&tab=resources',
+            'hostcheckr-resources',
             array($this, 'admin_page')
         );
 
@@ -215,7 +226,7 @@ class HostCheckr
             __('Hosting Info', 'hostcheckr'),
             __('Hosting Info', 'hostcheckr'),
             'manage_options',
-            'hostcheckr&tab=hosting',
+            'hostcheckr-hosting',
             array($this, 'admin_page')
         );
 
@@ -224,7 +235,7 @@ class HostCheckr
             __('Performance Check', 'hostcheckr'),
             __('Performance Check', 'hostcheckr'),
             'manage_options',
-            'hostcheckr&tab=performance',
+            'hostcheckr-performance',
             array($this, 'admin_page')
         );
     }
@@ -273,12 +284,16 @@ class HostCheckr
         wp_localize_script('hostcheckr-admin', 'hostcheckr_ajax', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('hostcheckr_nonce'),
+            'poll_interval' => 10000,
+            'live_db_settings' => $this->getLiveDbSettings(),
             'strings' => array(
                 'loading' => __('Loading...', 'hostcheckr'),
                 'error' => __('Error occurred', 'hostcheckr'),
                 'copied' => __('Copied to clipboard!', 'hostcheckr'),
                 'export_success' => __('Report exported successfully!', 'hostcheckr'),
                 'refreshing' => __('Refreshing system information...', 'hostcheckr'),
+                'live_db_unavailable' => __('Live database monitoring is temporarily unavailable.', 'hostcheckr'),
+                'live_db_saved' => __('Live monitor settings saved.', 'hostcheckr'),
             )
         ));
     }
@@ -294,8 +309,17 @@ class HostCheckr
         }
         
         $overall_status = $this->getOverallStatus();
+        $access_restriction_warnings = $this->getAccessRestrictionWarnings();
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only tab routing
+        $current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : 'hostcheckr';
+        $tab_map = [
+            'hostcheckr-overview' => 'overview',
+            'hostcheckr-resources' => 'resources',
+            'hostcheckr-hosting' => 'hosting',
+            'hostcheckr-performance' => 'performance',
+        ];
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce
-        $current_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : 'overview';
+        $current_tab = isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : ($tab_map[$current_page] ?? 'overview');
         ?>
         <div class="wrap hostcheckr-wrap">
             <!-- Branded Header -->
@@ -336,6 +360,18 @@ class HostCheckr
                     </div>
                 </div>
             </div>
+
+            <?php if (!empty($access_restriction_warnings)): ?>
+                <div class="hostcheckr-restriction-warning">
+                    <h3><?php esc_html_e('Limited Server Access Detected', 'hostcheckr'); ?></h3>
+                    <p><?php esc_html_e('Your hosting security settings are blocking some system probes. HostCheckr will continue with safe fallbacks where possible.', 'hostcheckr'); ?></p>
+                    <ul>
+                        <?php foreach ($access_restriction_warnings as $warning): ?>
+                            <li><?php echo esc_html($warning); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
 
             <!-- Quick Stats Bar -->
             <div class="quick-stats-bar">
@@ -441,7 +477,7 @@ class HostCheckr
                             <p><?php esc_html_e('Get expert WordPress optimization services from KloudBoy', 'hostcheckr'); ?></p>
                         </div>
                         <div class="support-action">
-                            <a href="https://hostcheckr.kloudboy.com/support" target="_blank" class="button button-primary support-btn">
+                            <a href="<?php echo esc_url('https://hostcheckr.kloudboy.com/support'); ?>" target="_blank" rel="noopener noreferrer" class="button button-primary support-btn">
                                 <span class="dashicons dashicons-external"></span>
                                 <?php esc_html_e('Contact KloudBoy', 'hostcheckr'); ?>
                             </a>
@@ -988,6 +1024,75 @@ class HostCheckr
                                 </p>
                             </div>
 
+                            <div class="live-db-monitor" id="live-db-monitor">
+                                <div class="live-db-header">
+                                    <h3><?php esc_html_e('Live Database Monitor', 'hostcheckr'); ?></h3>
+                                    <div class="live-db-actions">
+                                        <span class="live-db-last-updated" id="live-db-last-updated"><?php esc_html_e('Waiting for first sample...', 'hostcheckr'); ?></span>
+                                        <button type="button" class="button button-secondary live-db-refresh-btn" id="live-db-refresh-btn">
+                                            <?php esc_html_e('Refresh Now', 'hostcheckr'); ?>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="live-db-description">
+                                    <?php esc_html_e('Real-time database health signals from your current server session. Values update automatically while this tab is open.', 'hostcheckr'); ?>
+                                </p>
+                                <div class="live-db-grid" id="live-db-grid">
+                                    <div class="live-db-card">
+                                        <span class="live-db-label"><?php esc_html_e('DB Response Time', 'hostcheckr'); ?></span>
+                                        <span class="live-db-value" data-db-metric="response_ms"><?php esc_html_e('Loading...', 'hostcheckr'); ?></span>
+                                    </div>
+                                    <div class="live-db-card">
+                                        <span class="live-db-label"><?php esc_html_e('Autoload Size', 'hostcheckr'); ?></span>
+                                        <span class="live-db-value" data-db-metric="autoload_mb"><?php esc_html_e('Loading...', 'hostcheckr'); ?></span>
+                                    </div>
+                                    <div class="live-db-card">
+                                        <span class="live-db-label"><?php esc_html_e('Estimated DB Size', 'hostcheckr'); ?></span>
+                                        <span class="live-db-value" data-db-metric="db_size_mb"><?php esc_html_e('Loading...', 'hostcheckr'); ?></span>
+                                    </div>
+                                    <div class="live-db-card">
+                                        <span class="live-db-label"><?php esc_html_e('Post Revisions', 'hostcheckr'); ?></span>
+                                        <span class="live-db-value" data-db-metric="revisions"><?php esc_html_e('Loading...', 'hostcheckr'); ?></span>
+                                    </div>
+                                    <div class="live-db-card">
+                                        <span class="live-db-label"><?php esc_html_e('Active DB Threads', 'hostcheckr'); ?></span>
+                                        <span class="live-db-value" data-db-metric="threads_connected"><?php esc_html_e('Loading...', 'hostcheckr'); ?></span>
+                                    </div>
+                                    <div class="live-db-card">
+                                        <span class="live-db-label"><?php esc_html_e('Slow Queries', 'hostcheckr'); ?></span>
+                                        <span class="live-db-value" data-db-metric="slow_queries"><?php esc_html_e('Loading...', 'hostcheckr'); ?></span>
+                                    </div>
+                                </div>
+                                <div class="live-db-warnings" id="live-db-warnings" style="display:none;"></div>
+                                <div class="live-db-patterns" id="live-db-patterns" style="display:none;"></div>
+                                <div class="live-db-settings">
+                                    <h4><?php esc_html_e('Live Monitor Settings', 'hostcheckr'); ?></h4>
+                                    <div class="live-db-settings-grid">
+                                        <label class="live-db-setting-item">
+                                            <span><?php esc_html_e('Enable Live Monitoring', 'hostcheckr'); ?></span>
+                                            <input type="checkbox" id="live-db-enabled" />
+                                        </label>
+                                        <label class="live-db-setting-item">
+                                            <span><?php esc_html_e('Polling Interval (seconds)', 'hostcheckr'); ?></span>
+                                            <input type="number" id="live-db-interval" min="5" max="120" step="1" />
+                                        </label>
+                                        <label class="live-db-setting-item">
+                                            <span><?php esc_html_e('Max Slow Query Patterns', 'hostcheckr'); ?></span>
+                                            <input type="number" id="live-db-max-patterns" min="1" max="20" step="1" />
+                                        </label>
+                                        <label class="live-db-setting-item">
+                                            <span><?php esc_html_e('Lightweight Mode (skip heavy DB probes)', 'hostcheckr'); ?></span>
+                                            <input type="checkbox" id="live-db-lightweight-mode" />
+                                        </label>
+                                    </div>
+                                    <div class="live-db-settings-actions">
+                                        <button type="button" class="button button-secondary" id="live-db-save-settings">
+                                            <?php esc_html_e('Save Live Monitor Settings', 'hostcheckr'); ?>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <?php
                             require_once HOSTCHECKR_PLUGIN_PATH . 'includes/class-hostcheckr-performance.php';
                             $performance = new HostCheckr_Performance();
@@ -1138,23 +1243,18 @@ class HostCheckr
             <div class="hostcheckr-footer">
                 <div class="footer-content">
                     <div class="footer-branding">
-                        <p><?php 
-                        /* translators: %s: plugin name */
-                        printf(esc_html__('Powered by %s', 'hostcheckr'), '<strong>HostCheckr</strong>'); 
-                        ?> | 
-                        <?php 
-                        /* translators: %s: developer name with link */
-                        printf(esc_html__('Developed by %s', 'hostcheckr'), '<a href="https://kloudboy.com" target="_blank">Bajpan Gosh</a>'); 
-                        ?> | 
-                        <?php 
-                        /* translators: %s: company name with link */
-                        printf(esc_html__('Company: %s', 'hostcheckr'), '<a href="https://kloudboy.com" target="_blank">KloudBoy</a>'); 
-                        ?></p>
+                        <p>
+                            <?php esc_html_e('Powered by HostCheckr', 'hostcheckr'); ?> |
+                            <?php esc_html_e('Developed by', 'hostcheckr'); ?>
+                            <a href="<?php echo esc_url('https://kloudboy.com'); ?>" target="_blank" rel="noopener noreferrer">Bajpan Gosh</a> |
+                            <?php esc_html_e('Company:', 'hostcheckr'); ?>
+                            <a href="<?php echo esc_url('https://kloudboy.com'); ?>" target="_blank" rel="noopener noreferrer">KloudBoy</a>
+                        </p>
                     </div>
                     <div class="footer-links">
-                        <a href="https://hostcheckr.kloudboy.com" target="_blank"><?php esc_html_e('Visit Plugin Site', 'hostcheckr'); ?></a>
-                        <a href="https://hostcheckr.kloudboy.com/support" target="_blank"><?php esc_html_e('Get Support', 'hostcheckr'); ?></a>
-                        <a href="https://hostcheckr.kloudboy.com/docs" target="_blank"><?php esc_html_e('Documentation', 'hostcheckr'); ?></a>
+                        <a href="<?php echo esc_url('https://hostcheckr.kloudboy.com'); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Visit Plugin Site', 'hostcheckr'); ?></a>
+                        <a href="<?php echo esc_url('https://hostcheckr.kloudboy.com/support'); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Get Support', 'hostcheckr'); ?></a>
+                        <a href="<?php echo esc_url('https://hostcheckr.kloudboy.com/docs'); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Documentation', 'hostcheckr'); ?></a>
                     </div>
                 </div>
             </div>
@@ -1617,7 +1717,7 @@ class HostCheckr
                     $memory['usage_percent'] = round(($used_kb / $total_kb) * 100, 1) . '%';
                 }
             }
-        } elseif (PHP_OS_FAMILY === 'Windows') {
+        } elseif (PHP_OS_FAMILY === 'Windows' && function_exists('shell_exec')) {
             // Windows memory detection
             $output = shell_exec('wmic computersystem get TotalPhysicalMemory /value');
             if ($output && preg_match('/TotalPhysicalMemory=(\d+)/', $output, $matches)) {
@@ -1742,12 +1842,18 @@ class HostCheckr
         // Fallback: Try to detect based on performance characteristics
         $start_time = microtime(true);
         $test_file = ABSPATH . 'wp-content/temp_storage_test.tmp';
-        
-        // Write test
-        file_put_contents($test_file, str_repeat('x', 1024 * 100)); // 100KB
-        
-        // Read test
-        $content = file_get_contents($test_file);
+
+        // Write/read probe only when writable to avoid noisy warnings on locked-down hosts.
+        if (!is_writable(dirname($test_file))) {
+            return __('Unknown', 'hostcheckr');
+        }
+
+        $write_ok = file_put_contents($test_file, str_repeat('x', 1024 * 100)); // 100KB
+        if ($write_ok === false) {
+            return __('Unknown', 'hostcheckr');
+        }
+
+        file_get_contents($test_file);
         wp_delete_file($test_file);
         
         $end_time = microtime(true);
@@ -1769,6 +1875,7 @@ class HostCheckr
             'gateway' => __('Not available', 'hostcheckr'),
             'dns' => __('Not available', 'hostcheckr')
         ];
+        $gateway = '';
 
         // Get network interfaces (Linux)
         if (is_readable('/proc/net/dev')) {
@@ -1790,9 +1897,19 @@ class HostCheckr
 
         // Get default gateway
         $gateway_cmd = 'ip route | grep default';
-        $gateway_output = shell_exec($gateway_cmd);
-        if ($gateway_output && preg_match('/default via (\S+)/', $gateway_output, $matches)) {
-            $network['gateway'] = $matches[1];
+        if (function_exists('shell_exec')) {
+            $gateway_output = shell_exec($gateway_cmd);
+            if ($gateway_output && preg_match('/default via (\S+)/', $gateway_output, $matches)) {
+                $gateway = $matches[1];
+            }
+        }
+        
+        // Fallback when shell_exec is blocked: parse Linux route table directly.
+        if (empty($gateway)) {
+            $gateway = $this->getGatewayFromProcRoute();
+        }
+        if (!empty($gateway)) {
+            $network['gateway'] = $gateway;
         }
 
         // Get DNS servers
@@ -1807,6 +1924,92 @@ class HostCheckr
         }
 
         return $network;
+    }
+
+    /**
+     * Get default gateway from /proc/net/route for locked-down Linux hosts.
+     *
+     * @return string
+     */
+    protected function getGatewayFromProcRoute()
+    {
+        if (PHP_OS_FAMILY !== 'Linux' || !is_readable('/proc/net/route')) {
+            return '';
+        }
+
+        $route_data = file_get_contents('/proc/net/route');
+        if (!$route_data) {
+            return '';
+        }
+
+        $lines = explode("\n", trim($route_data));
+        array_shift($lines); // Drop header line.
+
+        foreach ($lines as $line) {
+            $columns = preg_split('/\s+/', trim($line));
+            if (!is_array($columns) || count($columns) < 3) {
+                continue;
+            }
+
+            // Destination 00000000 indicates the default route.
+            if ($columns[1] !== '00000000') {
+                continue;
+            }
+
+            $gateway_hex = $columns[2];
+            if (strlen($gateway_hex) !== 8) {
+                continue;
+            }
+
+            $gateway_dec = hexdec(substr($gateway_hex, 6, 2) . substr($gateway_hex, 4, 2) . substr($gateway_hex, 2, 2) . substr($gateway_hex, 0, 2));
+            $gateway_ip = long2ip($gateway_dec);
+
+            if (!empty($gateway_ip)) {
+                return $gateway_ip;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Detect capability restrictions imposed by hosting security policies.
+     *
+     * @return array
+     */
+    protected function getAccessRestrictionWarnings()
+    {
+        $warnings = [];
+        $disabled_functions = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+
+        if (!function_exists('shell_exec') || in_array('shell_exec', $disabled_functions, true)) {
+            $warnings[] = __('Command execution is disabled (`shell_exec`). Some network and hardware checks may be limited.', 'hostcheckr');
+        }
+
+        if (!function_exists('stream_socket_client') || in_array('stream_socket_client', $disabled_functions, true)) {
+            $warnings[] = __('Outbound socket checks are restricted. SSL certificate issuer/expiry detection may be incomplete.', 'hostcheckr');
+        }
+
+        if (PHP_OS_FAMILY === 'Linux') {
+            if (!is_readable('/proc/meminfo')) {
+                $warnings[] = __('Cannot read `/proc/meminfo`. RAM details are restricted by the host.', 'hostcheckr');
+            }
+            if (!is_readable('/proc/cpuinfo')) {
+                $warnings[] = __('Cannot read `/proc/cpuinfo`. CPU model/core details are restricted by the host.', 'hostcheckr');
+            }
+            if (!is_readable('/proc/net/dev')) {
+                $warnings[] = __('Cannot read `/proc/net/dev`. Network interface visibility is restricted.', 'hostcheckr');
+            }
+            if (!is_readable('/proc/net/route') && (!function_exists('shell_exec') || in_array('shell_exec', $disabled_functions, true))) {
+                $warnings[] = __('Default gateway cannot be detected because both shell access and route-table access are restricted.', 'hostcheckr');
+            }
+        }
+
+        if (defined('WP_CONTENT_DIR') && !is_writable(WP_CONTENT_DIR)) {
+            $warnings[] = __('`wp-content` is not writable. File system speed probes are skipped for safety.', 'hostcheckr');
+        }
+
+        return array_unique($warnings);
     }
 
     /**
@@ -1837,7 +2040,8 @@ class HostCheckr
         ];
 
         $server_info = isset($_SERVER['SERVER_SOFTWARE']) ? strtolower(sanitize_text_field(wp_unslash($_SERVER['SERVER_SOFTWARE']))) : '';
-        $hostname = strtolower(gethostname());
+        $hostname_raw = gethostname();
+        $hostname = is_string($hostname_raw) ? strtolower($hostname_raw) : '';
         $server_name = isset($_SERVER['SERVER_NAME']) ? strtolower(sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME']))) : '';
         
         foreach ($indicators as $provider => $keywords) {
@@ -1892,7 +2096,7 @@ class HostCheckr
         // Measure response time
         $start_time = microtime(true);
         // Simulate some work
-        sleep(0.001);
+        usleep(1000);
         $end_time = microtime(true);
         $performance['response_time'] = round(($end_time - $start_time) * 1000, 2) . ' ms';
         
@@ -1907,11 +2111,17 @@ class HostCheckr
         // File system speed test
         $fs_start = microtime(true);
         $test_file = ABSPATH . 'wp-content/temp_fs_test.tmp';
-        file_put_contents($test_file, 'test');
-        $content = file_get_contents($test_file);
-        wp_delete_file($test_file);
-        $fs_end = microtime(true);
-        $performance['fs_speed'] = round(($fs_end - $fs_start) * 1000, 2) . ' ms';
+        $fs_speed = __('Not available', 'hostcheckr');
+        if (is_writable(dirname($test_file))) {
+            $write_ok = file_put_contents($test_file, 'test');
+            if ($write_ok !== false) {
+                file_get_contents($test_file);
+                wp_delete_file($test_file);
+                $fs_end = microtime(true);
+                $fs_speed = round(($fs_end - $fs_start) * 1000, 2) . ' ms';
+            }
+        }
+        $performance['fs_speed'] = $fs_speed;
         
         return $performance;
     }
@@ -1935,7 +2145,6 @@ class HostCheckr
             $security['ssl_status'] = __('Enabled', 'hostcheckr');
             
             // Get SSL certificate info
-            $url = isset($_SERVER['HTTP_HOST']) ? 'https://' . sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : 'https://localhost';
             $context = stream_context_create([
                 'ssl' => [
                     'capture_peer_cert' => true,
@@ -2239,21 +2448,374 @@ class HostCheckr
         
         $type = $item['type'];
         $itemName = $item['item'];
+        $base_recommendation = '';
         
         if (isset($recommendations[$type][$itemName])) {
-            return '<p class="recommendation-text">' . $recommendations[$type][$itemName] . '</p>';
+            $base_recommendation = $recommendations[$type][$itemName];
+        } else {
+            // Generic recommendations based on type
+            switch ($type) {
+                case 'Version':
+                    $base_recommendation = __('Contact your hosting provider or system administrator to upgrade this component.', 'hostcheckr');
+                    break;
+                case 'Configuration':
+                    $base_recommendation = __('Modify your php.ini file or contact your hosting provider to adjust this setting.', 'hostcheckr');
+                    break;
+                case 'Extension':
+                    $base_recommendation = __('Install this PHP extension through your package manager or contact your hosting provider.', 'hostcheckr');
+                    break;
+                default:
+                    $base_recommendation = __('Please consult the WordPress documentation or contact your hosting provider for assistance.', 'hostcheckr');
+                    break;
+            }
         }
-        
-        // Generic recommendations based on type
-        switch ($type) {
-            case 'Version':
-                return '<p class="recommendation-text">' . __('Contact your hosting provider or system administrator to upgrade this component.', 'hostcheckr') . '</p>';
-            case 'Configuration':
-                return '<p class="recommendation-text">' . __('Modify your php.ini file or contact your hosting provider to adjust this setting.', 'hostcheckr') . '</p>';
-            case 'Extension':
-                return '<p class="recommendation-text">' . __('Install this PHP extension through your package manager or contact your hosting provider.', 'hostcheckr') . '</p>';
+
+        $html = '<p class="recommendation-text">' . $base_recommendation . '</p>';
+
+        $wp_config_snippet = $this->getWpConfigFixSnippet($item);
+        if (!empty($wp_config_snippet)) {
+            $html .= '<div class="recommendation-snippet">';
+            $html .= '<p class="recommendation-backup"><strong>' . esc_html__('Important:', 'hostcheckr') . '</strong> ' . esc_html__('Back up your wp-config.php before applying this fix.', 'hostcheckr') . '</p>';
+            $html .= '<p class="recommendation-insert">' . esc_html__("Add this above the line that says \"/* That's all, stop editing! Happy publishing. */\" in wp-config.php:", 'hostcheckr') . '</p>';
+            $html .= '<pre><code>' . esc_html($wp_config_snippet) . '</code></pre>';
+            $html .= '<div class="recommendation-actions"><button type="button" class="button button-secondary copy-config-btn" data-copy="' . esc_attr($wp_config_snippet) . '">' . esc_html__('Copy wp-config fix', 'hostcheckr') . '</button></div>';
+            $html .= '</div>';
+        }
+
+        return $html;
+    }
+
+    /**
+     * AJAX endpoint for live database monitor metrics.
+     */
+    public function ajax_live_db_metrics()
+    {
+        check_ajax_referer('hostcheckr_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => __('Insufficient permissions.', 'hostcheckr')], 403);
+        }
+
+        wp_send_json_success($this->getLiveDatabaseMetrics());
+    }
+
+    /**
+     * AJAX endpoint to save live DB monitor settings.
+     */
+    public function ajax_save_live_db_settings()
+    {
+        check_ajax_referer('hostcheckr_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => __('Insufficient permissions.', 'hostcheckr')], 403);
+        }
+
+        $enabled_raw = isset($_POST['enabled']) ? sanitize_text_field(wp_unslash($_POST['enabled'])) : '1';
+        $interval_raw = isset($_POST['interval']) ? sanitize_text_field(wp_unslash($_POST['interval'])) : '10';
+        $max_patterns_raw = isset($_POST['max_patterns']) ? sanitize_text_field(wp_unslash($_POST['max_patterns'])) : '5';
+        $lightweight_mode_raw = isset($_POST['lightweight_mode']) ? sanitize_text_field(wp_unslash($_POST['lightweight_mode'])) : '0';
+
+        $settings = [
+            'enabled' => $enabled_raw === '1',
+            'interval' => max(5, min(120, (int) $interval_raw)),
+            'max_patterns' => max(1, min(20, (int) $max_patterns_raw)),
+            'lightweight_mode' => $lightweight_mode_raw === '1',
+        ];
+
+        update_option('hostcheckr_live_db_settings', $settings, false);
+        wp_cache_delete('hostcheckr_live_db_metrics', 'hostcheckr');
+
+        wp_send_json_success([
+            'settings' => $settings,
+            'message' => __('Live monitor settings saved.', 'hostcheckr'),
+        ]);
+    }
+
+    /**
+     * Collect live database metrics with safe fallbacks.
+     *
+     * @return array
+     */
+    protected function getLiveDatabaseMetrics()
+    {
+        global $wpdb;
+        $settings = $this->getLiveDbSettings();
+
+        if (!$settings['enabled']) {
+            return [
+                'response_ms' => __('Disabled', 'hostcheckr'),
+                'autoload_mb' => __('Disabled', 'hostcheckr'),
+                'db_size_mb' => __('Disabled', 'hostcheckr'),
+                'revisions' => __('Disabled', 'hostcheckr'),
+                'threads_connected' => __('Disabled', 'hostcheckr'),
+                'slow_queries' => __('Disabled', 'hostcheckr'),
+                'warnings' => [__('Live database monitoring is disabled in settings.', 'hostcheckr')],
+                'slow_query_patterns' => [],
+                'sampled_at' => current_time('mysql'),
+                'sampled_unix' => time(),
+            ];
+        }
+
+        $cache_key = 'hostcheckr_live_db_metrics';
+        $cached_metrics = wp_cache_get($cache_key, 'hostcheckr');
+        if (is_array($cached_metrics) && isset($cached_metrics['sampled_unix']) && ((time() - (int) $cached_metrics['sampled_unix']) < 5)) {
+            return $cached_metrics;
+        }
+
+        $metrics = [
+            'response_ms' => __('Not available', 'hostcheckr'),
+            'autoload_mb' => __('Not available', 'hostcheckr'),
+            'db_size_mb' => __('Not available', 'hostcheckr'),
+            'revisions' => __('Not available', 'hostcheckr'),
+            'threads_connected' => __('Not available', 'hostcheckr'),
+            'slow_queries' => __('Not available', 'hostcheckr'),
+            'warnings' => [],
+            'slow_query_patterns' => [],
+            'sampled_at' => current_time('mysql'),
+            'sampled_unix' => time(),
+        ];
+
+        $start = microtime(true);
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+        $probe = $wpdb->get_var('SELECT 1');
+        if ($probe !== null) {
+            $metrics['response_ms'] = round((microtime(true) - $start) * 1000, 2) . ' ms';
+        }
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $autoload_size = $wpdb->get_var("SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} WHERE autoload = 'yes'");
+        if ($autoload_size !== null) {
+            $metrics['autoload_mb'] = round(((float) $autoload_size) / 1024 / 1024, 2) . ' MB';
+        }
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+        $revisions = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'revision'");
+        if ($revisions !== null) {
+            $metrics['revisions'] = number_format_i18n((int) $revisions);
+        }
+
+        // MySQL status is often blocked by hosting policies.
+        if (empty($settings['lightweight_mode'])) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $threads_row = $wpdb->get_row("SHOW STATUS LIKE 'Threads_connected'");
+            if (is_object($threads_row) && isset($threads_row->Value)) {
+                $metrics['threads_connected'] = (string) $threads_row->Value;
+            } else {
+                $metrics['warnings'][] = __('`SHOW STATUS` is restricted on this host. Thread metrics are unavailable.', 'hostcheckr');
+            }
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $slow_row = $wpdb->get_row("SHOW GLOBAL STATUS LIKE 'Slow_queries'");
+            if (is_object($slow_row) && isset($slow_row->Value)) {
+                $metrics['slow_queries'] = (string) $slow_row->Value;
+            } else {
+                $metrics['warnings'][] = __('Global status metrics are restricted. Slow query counters are unavailable.', 'hostcheckr');
+            }
+
+            $db_size_query = $wpdb->prepare(
+                'SELECT SUM(data_length + index_length) / 1024 / 1024 AS size FROM information_schema.TABLES WHERE table_schema = %s',
+                DB_NAME
+            );
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $db_size = $wpdb->get_var($db_size_query);
+            if ($db_size !== null) {
+                $metrics['db_size_mb'] = round((float) $db_size, 2) . ' MB';
+            } else {
+                $metrics['warnings'][] = __('`information_schema` access is limited. Database size is estimated as unavailable.', 'hostcheckr');
+            }
+        } else {
+            $metrics['warnings'][] = __('Lightweight mode is enabled. Status and information_schema probes are skipped to reduce load.', 'hostcheckr');
+        }
+
+        $slow_query_samples = $this->getSlowQuerySamples();
+        if (!empty($slow_query_samples)) {
+            $metrics['slow_query_patterns'] = $this->buildSlowQueryPatterns($slow_query_samples, (int) $settings['max_patterns']);
+        } else {
+            $metrics['warnings'][] = __('No slow query samples found. Connect a slow-query source to enable pattern analysis.', 'hostcheckr');
+        }
+
+        wp_cache_set($cache_key, $metrics, 'hostcheckr', 5);
+
+        return $metrics;
+    }
+
+    /**
+     * Get slow query samples from known storage, then allow external providers via filter.
+     *
+     * @return array
+     */
+    protected function getSlowQuerySamples()
+    {
+        $samples = get_option('hostcheckr_slow_query_samples', []);
+
+        // External integrations can provide samples:
+        // [
+        //   ['query' => 'SELECT ...', 'time' => 0.345],
+        //   ...
+        // ]
+        $samples = apply_filters('hostcheckr_slow_query_samples', $samples);
+
+        if (!is_array($samples)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($samples as $sample) {
+            if (!is_array($sample) || empty($sample['query'])) {
+                continue;
+            }
+
+            $normalized[] = [
+                'query' => (string) $sample['query'],
+                'time' => isset($sample['time']) ? (float) $sample['time'] : 0.0,
+            ];
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Build grouped slow-query signatures for dashboard display.
+     *
+     * @param array $samples Slow query sample rows.
+     * @return array
+     */
+    protected function buildSlowQueryPatterns(array $samples, $limit = 5)
+    {
+        $patterns = [];
+
+        foreach ($samples as $sample) {
+            $query = $sample['query'];
+            $signature = $this->normalizeSlowQuery($query);
+            if (empty($signature)) {
+                continue;
+            }
+
+            if (!isset($patterns[$signature])) {
+                $patterns[$signature] = [
+                    'signature' => $signature,
+                    'count' => 0,
+                    'total_time' => 0.0,
+                    'max_time' => 0.0,
+                ];
+            }
+
+            $patterns[$signature]['count']++;
+            $patterns[$signature]['total_time'] += $sample['time'];
+            $patterns[$signature]['max_time'] = max($patterns[$signature]['max_time'], $sample['time']);
+        }
+
+        if (empty($patterns)) {
+            return [];
+        }
+
+        uasort($patterns, static function($a, $b) {
+            return $b['total_time'] <=> $a['total_time'];
+        });
+
+        $safe_limit = max(1, min(20, (int) $limit));
+        $top_patterns = array_slice(array_values($patterns), 0, $safe_limit);
+        foreach ($top_patterns as &$pattern) {
+            $pattern['avg_time'] = $pattern['count'] > 0 ? round($pattern['total_time'] / $pattern['count'], 4) : 0.0;
+            $pattern['total_time'] = round($pattern['total_time'], 4);
+            $pattern['max_time'] = round($pattern['max_time'], 4);
+        }
+        unset($pattern);
+
+        return $top_patterns;
+    }
+
+    /**
+     * Read and sanitize live DB monitor settings.
+     *
+     * @return array
+     */
+    protected function getLiveDbSettings()
+    {
+        $defaults = [
+            'enabled' => true,
+            'interval' => 10,
+            'max_patterns' => 5,
+            'lightweight_mode' => true,
+        ];
+
+        $settings = get_option('hostcheckr_live_db_settings', []);
+        if (!is_array($settings)) {
+            return $defaults;
+        }
+
+        return [
+            'enabled' => isset($settings['enabled']) ? (bool) $settings['enabled'] : $defaults['enabled'],
+            'interval' => isset($settings['interval']) ? max(5, min(120, (int) $settings['interval'])) : $defaults['interval'],
+            'max_patterns' => isset($settings['max_patterns']) ? max(1, min(20, (int) $settings['max_patterns'])) : $defaults['max_patterns'],
+            'lightweight_mode' => isset($settings['lightweight_mode']) ? (bool) $settings['lightweight_mode'] : $defaults['lightweight_mode'],
+        ];
+    }
+
+    /**
+     * Normalize SQL into a stable query signature.
+     *
+     * @param string $query SQL query.
+     * @return string
+     */
+    protected function normalizeSlowQuery($query)
+    {
+        $query = strtolower(trim((string) $query));
+        if ($query === '') {
+            return '';
+        }
+
+        // Remove comments and collapse whitespace.
+        $query = preg_replace('/\/\*.*?\*\//s', '', $query);
+        $query = preg_replace('/--.*$/m', '', $query);
+        $query = preg_replace('/\s+/', ' ', $query);
+
+        // Replace string and numeric literals.
+        $query = preg_replace("/'[^']*'/", "'%s'", $query);
+        $query = preg_replace('/\b\d+\b/', '%d', $query);
+
+        // Keep signatures compact for UI.
+        if (strlen($query) > 180) {
+            $query = substr($query, 0, 177) . '...';
+        }
+
+        return $query;
+    }
+
+    /**
+     * Build wp-config.php snippet for supported configuration fixes.
+     *
+     * @param array $item Issue details
+     * @return string
+     */
+    protected function getWpConfigFixSnippet($item)
+    {
+        if (!isset($item['type']) || $item['type'] !== 'Configuration' || empty($item['item'])) {
+            return '';
+        }
+
+        $setting = $item['item'];
+        $target = isset($item['recommended']) ? $item['recommended'] : (isset($item['required']) ? $item['required'] : null);
+
+        if (empty($target)) {
+            return '';
+        }
+
+        switch ($setting) {
+            case 'memory_limit':
+                $target_memory = preg_replace('/[^0-9A-Za-z]/', '', (string) $target);
+                return "define( 'WP_MEMORY_LIMIT', '" . $target_memory . "' );\ndefine( 'WP_MAX_MEMORY_LIMIT', '" . $target_memory . "' );";
+            case 'max_execution_time':
+            case 'max_input_time':
+            case 'max_input_vars':
+            case 'post_max_size':
+            case 'upload_max_filesize':
+                $target_value = preg_replace('/[^0-9A-Za-z]/', '', (string) $target);
+                return "@ini_set( '" . $setting . "', '" . $target_value . "' );";
+            case 'file_uploads':
+                return "@ini_set( 'file_uploads', '1' );";
             default:
-                return '<p class="recommendation-text">' . __('Please consult the WordPress documentation or contact your hosting provider for assistance.', 'hostcheckr') . '</p>';
+                return '';
         }
     }
 
@@ -2301,8 +2863,8 @@ add_action('plugins_loaded', 'hostcheckr_init');
  */
 function hostcheckr_plugin_action_links($links) {
     $action_links = array(
-        'dashboard' => '<a href="' . admin_url('admin.php?page=hostcheckr') . '">' . __('Dashboard', 'hostcheckr') . '</a>',
-        'support' => '<a href="https://hostcheckr.kloudboy.com/support" target="_blank">' . __('Support', 'hostcheckr') . '</a>',
+        'dashboard' => '<a href="' . esc_url(admin_url('admin.php?page=hostcheckr')) . '">' . esc_html__('Dashboard', 'hostcheckr') . '</a>',
+        'support' => '<a href="' . esc_url('https://hostcheckr.kloudboy.com/support') . '" target="_blank" rel="noopener noreferrer">' . esc_html__('Support', 'hostcheckr') . '</a>',
     );
     return array_merge($action_links, $links);
 }
