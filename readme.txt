@@ -4,7 +4,7 @@ Tags: hosting, system-info, performance, health-check, server-monitoring
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,6 +108,10 @@ No. HostCheckr provides copy-ready `wp-config.php` snippets and backup-first gui
 
 == Changelog ==
 
+= 1.0.3 =
+* Fixed PHP deprecation warning in server uptime parsing
+* Restored Performance page rendering when deprecations are displayed as notices
+
 = 1.0.2 =
 * Live Database Monitor with real-time polling in Performance tab
 * Configurable Live Monitor Settings (enable/disable, interval, max pattern count)
@@ -150,6 +154,9 @@ No. HostCheckr provides copy-ready `wp-config.php` snippets and backup-first gui
 * Mobile-responsive interface
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Fixes a deprecation warning that could break Performance page rendering on some hosts.
 
 = 1.0.2 =
 Live DB Monitor, settings controls, and Lightweight Mode (default ON) for better shared-host performance.

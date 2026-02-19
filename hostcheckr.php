@@ -3,7 +3,7 @@
  * Plugin Name: HostCheckr
  * Plugin URI: https://hostcheckr.kloudboy.com
  * Description: Instantly check if your hosting is slowing down your WordPress. Know Your Hosting. Instantly.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Bajpan Gosh
  * Author URI: https://kloudboy.com
  * License: GPL v2 or later
@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('HOSTCHECKR_VERSION', '1.0.2');
+define('HOSTCHECKR_VERSION', '1.0.3');
 define('HOSTCHECKR_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('HOSTCHECKR_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('HOSTCHECKR_PLUGIN_FILE', __FILE__);
